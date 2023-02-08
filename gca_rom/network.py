@@ -12,7 +12,7 @@ class AE_Params():
 
     Args:
         sparse_method (str): The method to use for sparsity constraint.
-        rate (int): The rate to use for the sparsity constraint.
+        rate (int): Amount of data used in training.
         seed (int): Seed for the random number generator.
         bottleneck_dim (int): The dimension of the bottleneck layer.
         tolerance (float): The tolerance value for stopping the training.
@@ -29,7 +29,7 @@ class AE_Params():
         scaler_name (str): The name of the scaler used for preprocessing.
         weight_decay (float): The weight decay for the optimizer.
         max_epochs (int): The maximum number of epochs to run training for.
-        miles (list): The miles for each epoch.
+        miles (list): The miles for learning rate update in scheduler.
         gamma (float): The gamma value for the optimizer.
         num_nodes (int): The number of nodes in the network.
         scaling_type (int): The type of scaling to use for preprocessing.
@@ -85,11 +85,11 @@ class Net(torch.nn.Module):
     act_map : AE_Params.act
         The activation map specified in the AE_Params.
     layer_vec : AE_Params.layer_vec
-        The layer vector specified in the AE_Params.
+        The layer vector specified in the AE_Params. Shape of the layers for the parameter space mapping. 
     steps : int
-        The number of steps for mapping, calculated as the length of the layer_vec minus 1.
+        Number of layers for the parameter mapping MLP.
     maptovec : nn.ModuleList
-        A list of linear modules for mapping.
+        A list of linear layers for mapping.
 
     Methods
     -------

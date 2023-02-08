@@ -13,13 +13,13 @@ class LoadDataset(Dataset):
     U : torch.Tensor
         The tensor representation of the specified variable from the data_mat.
     xx : torch.Tensor
-        The tensor representation of the 'xx' key from the data_mat.
+        The tensor representation of the 'xx' key from the data_mat. Refers to X coordinates of the domain
     yy : torch.Tensor
-        The tensor representation of the 'yy' key from the data_mat.
+        The tensor representation of the 'yy' key from the data_mat.Refers to Y coordinates of the domain
     T : torch.Tensor
-        The tensor representation of the 'T' key from the data_mat, casted to int.
+        The tensor representation of the 'T' key from the data_mat, casted to int. Adjacency Matrix
     E : torch.Tensor
-        The tensor representation of the 'E' key from the data_mat, casted to int.
+        The tensor representation of the 'E' key from the data_mat, casted to int. Connection Matrix
 
     __init__(self, root_dir, variable)
         Initializes the LoadDataset object by loading the data from the .mat file at the root_dir location and converting the specified variable to a tensor representation.

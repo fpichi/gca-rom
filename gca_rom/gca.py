@@ -10,7 +10,8 @@ class Encoder(torch.nn.Module):
 
     The Encoder class is a subclass of torch.nn.Module that implements a deep neural network for encoding graph data.
 
-    It uses the Graph Mixer Convolution (GMMConv) module to extract features from the graph structure and node features. The encoding is then passed through a feed-forward neural network with two fully connected layers to produce the final encoding.
+    It uses the Gaussian Mixture convolution (GMMConv) module to extract features from the graph structure and node features.
+    The encoding is then passed through a feed-forward neural network with two fully connected layers to produce the final encoding.
 
     Arguments:
     hidden_channels (list): A list of hidden channel sizes for each layer of the GMMConv module.

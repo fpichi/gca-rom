@@ -6,9 +6,9 @@ def save_error(error, norm, AE_Params, vars):
     """
     save_error(error: List[float], norm: List[float], AE_Params: object, vars: str)
 
-    This function takes in two lists error and norm of same length and saves their relative error, along with the max, mean and min of the relative error to a txt file.
+    This function takes in two lists of same length, error and norm, computed on the whole dataset for plotting reasons, and saves the relative error, along with the max, mean and min to a txt file.
 
-    The relative error is calculated as error/norm for each corresponding elements. The file is saved with a specific naming convention: AE_Params.net_dir + 'relative_errors' + AE_Params.net_run + vars + '.txt'
+    The relative error is calculated as error/norm for each corresponding element. The file is saved with a specific naming convention: AE_Params.net_dir + 'relative_errors' + AE_Params.net_run + vars + '.txt'
 
     Parameters:
     error (List[float]): A list of error values.

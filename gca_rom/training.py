@@ -9,14 +9,14 @@ def train(model, optimizer, device, scheduler, params, train_loader, train_traje
     is the MSE between the estimated z (latent space) and the actual z. The final loss is the sum of the MSE loss and the
     map loss multiplied by the weight `AE_Params.lambda_map`. The model is trained on the data from `train_loader` and 
     the optimization process is performed using the `optimizer`. The learning rate is updated after every iteration 
-    using `scheduler`. 
+    using `scheduler`. Use of mini-batching for reducing the computational cost.
 
     Args:
         model (torch.nn.Module): The autoencoder model to be trained.
         optimizer (torch.optim.Optimizer): The optimizer to update the model parameters.
         device (str): The device to run the model on ('cuda' or 'cpu').
         scheduler (torch.optim.lr_scheduler._LRScheduler): The learning rate scheduler to update the learning rate.
-        params (torch.Tensor): The parameters used to control the movement of the model.
+        params (torch.Tensor): Tensor containing the parameters of the model.
         train_loader (torch.utils.data.DataLoader): The data loader to provide the training data.
         train_trajectories (int): The number of training trajectories.
         AE_Params (dict): The dictionary containing the hyperparameters for the autoencoder model.

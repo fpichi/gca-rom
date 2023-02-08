@@ -26,8 +26,8 @@ def graphs_dataset(dataset, AE_Params):
     var: an array of the node features.
     VAR_all: an array of the scaled node features of the entire dataset.
     VAR_test: an array of the scaled node features of the test set.
-    train_trajectories: a list of indices of the training set.
-    test_trajectories: a list of indices of the test set.
+    train_snapshots: a list of indices of the training set.
+    test_snapshots: a list of indices of the test set.
     """
 
     xx = dataset.xx
@@ -47,13 +47,13 @@ def graphs_dataset(dataset, AE_Params):
     main_loop = np.arange(total_sims).tolist()
     np.random.shuffle(main_loop)
 
-    train_trajectories = main_loop[0:train_sims]
-    train_trajectories.sort()
-    test_trajectories = main_loop[train_sims:total_sims]
-    test_trajectories.sort()
+    train_snapshots = main_loop[0:train_sims]
+    train_snapshots.sort()
+    test_snapshots = main_loop[train_sims:total_sims]
+    test_snapshots.sort()
 
     ## FEATURE SCALING
-    var_test = dataset.U[:, test_trajectories]
+    var_test = dataset.U[:, test_snapshots]
 
     scaling_type = AE_Params.scaling_type
     scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type)
@@ -75,8 +75,8 @@ def graphs_dataset(dataset, AE_Params):
         graphs.append(dataset_graph)
 
     AE_Params.num_nodes = dataset_graph.num_nodes
-    train_dataset = [graphs[i] for i in train_trajectories]
-    test_dataset = [graphs[i] for i in test_trajectories]
+    train_dataset = [graphs[i] for i in train_snapshots]
+    test_dataset = [graphs[i] for i in test_snapshots]
 
     loader = DataLoader(graphs, batch_size=1)
     train_loader = DataLoader(train_dataset, batch_size=train_sims, shuffle=False)
@@ -84,4 +84,4 @@ def graphs_dataset(dataset, AE_Params):
     val_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
     return dataset_graph, loader, train_loader, test_loader, \
-            val_loader, scaler_all, scaler_test, xx, yy, var, VAR_all, VAR_test, train_trajectories, test_trajectories
+            val_loader, scaler_all, scaler_test, xx, yy, var, VAR_all, VAR_test, train_snapshots, test_snapshots
