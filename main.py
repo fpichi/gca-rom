@@ -21,14 +21,6 @@ dataset_graph, graph_loader, train_loader, test_loader, \
     val_loader, scaler_all, scaler_test, xx, yy, var, VAR_all, VAR_test, \
         train_trajectories,test_trajectories = preprocessing.graphs_dataset(dataset, AE_Params)
 
-params = torch.zeros(len(mu1_range) * len(mu2_range), 2)
-i1 = 0 
-for k1 in range(len(mu1_range)):
-    for k2 in range(len(mu2_range)):
-        params[i1, 0] = mu1_range[k1].item()
-        params[i1, 1] = mu2_range[k2].item()
-        i1 += 1
-
 mu1, mu2 = np.meshgrid(mu1_range, mu2_range)
 params = torch.tensor(np.vstack((mu1.T, mu2.T)).reshape(2, -1).T)
 params = params.to(device)
@@ -41,7 +33,6 @@ scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=AE_Params
 history = dict(train=[], l1=[], l2=[])
 history_test = dict(test=[], l1=[], l2=[])
 min_test_loss = np.Inf
-
 
 try:
     model.load_state_dict(torch.load(AE_Params.net_dir+AE_Params.net_name+AE_Params.net_run+'.pt', map_location=torch.device('cpu')))
@@ -71,7 +62,6 @@ except FileNotFoundError:
     # print(prof.key_averages().table(sort_by="self_cpu_time_total"))
     print("\nLoading best network for epoch: ", best_epoch)
     model.load_state_dict(torch.load(AE_Params.net_dir+AE_Params.net_name+AE_Params.net_run+'.pt', map_location=torch.device('cpu')))
-
 
 model.to("cpu")
 params = params.to("cpu")
