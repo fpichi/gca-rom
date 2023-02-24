@@ -123,7 +123,7 @@ class Decoder(torch.nn.Module):
         self.reset_parameters()
 
 
-    def decoder(self,x,data):
+    def decoder(self, x, data):
         edge_weight = data.edge_attr
         edge_index = data.edge_index
 
@@ -153,6 +153,6 @@ class Decoder(torch.nn.Module):
                     nn.init.kaiming_uniform_(param)
 
 
-    def forward(self,x, data):
+    def forward(self, x, data):
         x = self.decoder(x, data)
         return x
