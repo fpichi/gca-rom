@@ -3,7 +3,7 @@ from tqdm import tqdm
 import numpy as np
 
 
-def evaluate(VAR, model, loader, params, AE_Params):
+def evaluate(VAR, model, loader, params, AE_Params, test):
     """
     This function evaluates the performance of a trained Autoencoder (AE) model.
     It encodes the input data using both the model's encoder and a mapping function,
@@ -31,7 +31,7 @@ def evaluate(VAR, model, loader, params, AE_Params):
     with torch.no_grad():
         for data in tqdm(loader):
             z_net = model.solo_encoder(data)
-            z_map = model.mapping(params[index])
+            z_map = model.mapping(params[test[index], :])
             latents_map[index, :] = z_map
             latents_gca[index, :] = z_net
             lat_err = np.linalg.norm(z_net - z_map)/np.linalg.norm(z_net)
@@ -40,7 +40,7 @@ def evaluate(VAR, model, loader, params, AE_Params):
             index += 1
         np.savetxt(AE_Params.net_dir+'latents'+AE_Params.net_run+'.csv', latents_map.detach(), delimiter =',')
         latents_error = np.array(latents_error)
-        print("\nMaximum relative error for latent  = ", max(latents_error))
-        print("Mean relative error for latent = ", sum(latents_error)/len(latents_error))
-        print("Minimum relative error for latent = ", min(latents_error))
+        # print("\nMaximum relative error for latent  = ", max(latents_error))
+        # print("Mean relative error for latent = ", sum(latents_error)/len(latents_error))
+        # print("Minimum relative error for latent = ", min(latents_error))
     return results, latents_map, latents_gca

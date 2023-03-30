@@ -19,7 +19,7 @@ dataset_dir = '../dataset/'+problem_name+'_unstructured.mat'
 dataset = loader.LoadDataset(dataset_dir, variable)
 dataset_graph, graph_loader, train_loader, test_loader, \
     val_loader, scaler_all, scaler_test, xx, yy, var, VAR_all, VAR_test, \
-        train_trajectories,test_trajectories = preprocessing.graphs_dataset(dataset, AE_Params)
+        train_trajectories, test_trajectories = preprocessing.graphs_dataset(dataset, AE_Params)
 
 mu1, mu2 = np.meshgrid(mu1_range, mu2_range)
 params = torch.tensor(np.vstack((mu1.T, mu2.T)).reshape(2, -1).T)
@@ -67,7 +67,7 @@ model.to("cpu")
 params = params.to("cpu")
 vars = "GCA-ROM"
 
-results, latents_map, latents_gca = testing.evaluate(VAR_all, model, graph_loader, params, AE_Params)
+results, latents_map, latents_gca = testing.evaluate(VAR_all, model, graph_loader, params, AE_Params, range(params.shape[0]))
 
 plotting.plot_loss(AE_Params)
 plotting.plot_latent(AE_Params, latents_map, latents_gca)
@@ -80,6 +80,8 @@ for SNAP in snapshots[0:N]:
     plotting.plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params)
     plotting.plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx, yy, params)
 
-error_abs, norm = error.compute_error(results, VAR_all, scaler_all, AE_Params)
+results_test, _, _ = testing.evaluate(VAR_test, model, val_loader, params, AE_Params, test_trajectories)
+
+error_abs, norm = error.compute_error(results_test, VAR_test, scaler_test, AE_Params)
 error.print_error(error_abs, norm, vars)
 error.save_error(error_abs, norm, AE_Params, vars)

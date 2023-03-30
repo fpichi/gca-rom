@@ -34,7 +34,7 @@ def train(model, optimizer, device, scheduler, params, train_loader, train_traje
     for data in train_loader:
         optimizer.zero_grad()
         data = data.to(device)  
-        out, z, z_estimation = model(data, params[train_trajectories,:])
+        out, z, z_estimation = model(data, params[train_trajectories, :])
         loss_train_mse = F.mse_loss(out, data.x, reduction='mean')
         loss_train_map = F.mse_loss(z_estimation, z, reduction='mean')
         loss_train = loss_train_mse + AE_Params.lambda_map * loss_train_map
@@ -82,7 +82,7 @@ def val(model, device, params, test_loader, test_trajectories, AE_Params, histor
         sum_loss_1 = sum_loss_2 = 0
         for data in test_loader:
             data = data.to(device)
-            out, z, z_estimation = model(data, params[test_trajectories,:])
+            out, z, z_estimation = model(data, params[test_trajectories, :])
             loss_test_mse = F.mse_loss(out, data.x, reduction='mean')
             loss_test_map = F.mse_loss(z_estimation, z, reduction='mean')
             loss_test = loss_test_mse +  AE_Params.lambda_map * loss_test_map
