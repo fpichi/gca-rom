@@ -4,7 +4,7 @@ from gca_rom import scaling
 import matplotlib.gridspec as gridspec
 import matplotlib.cm as cm
 from matplotlib import ticker
-from matplotlib.ticker import MaxNLocator, ScalarFormatter
+from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
@@ -77,11 +77,12 @@ def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params
     ax = fig.add_subplot(projection='3d')
     ax.plot_surface(X1, X2, output, cmap=cm.coolwarm, color='blue')
     ax.contour(X1, X2, output, zdir='z', offset=output.min(), cmap=cm.coolwarm)
-    ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]), ylim=tuple([mu2_range[0], mu2_range[-1]]), xlabel='$\mu_1$', ylabel='$\mu_2$', zlabel='Relative error for '+vars)
+    ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]), ylim=tuple([mu2_range[0], mu2_range[-1]]), xlabel='$\mu_1$', ylabel='$\mu_2$', zlabel='$\\epsilon_{GCA}(\\mathbf{\mu})$')
     ax.plot(params[train_trajectories,0], params[train_trajectories,1], output.min()*np.ones(len(params[train_trajectories,1])), '*r')
+    plt.ticklabel_format(axis='z', style='sci', scilimits=(0,0))
     ax.set_title('Relative Error '+vars)
     plt.tight_layout()
-    plt.savefig(AE_Params.net_dir+'relative_error_'+vars+AE_Params.net_run+'.png', bbox_inches='tight')
+    plt.savefig(AE_Params.net_dir+'relative_error_'+vars+AE_Params.net_run+'.png', transparent=True, dpi=300)
 
 
 def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
