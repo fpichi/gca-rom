@@ -4,6 +4,7 @@ from gca_rom import scaling
 import matplotlib.gridspec as gridspec
 import matplotlib.cm as cm
 from matplotlib import ticker
+from matplotlib.ticker import MaxNLocator, ScalarFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
@@ -112,8 +113,9 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
     cbar = plt.colorbar(cs, cax=cax)
-    tick_locator = ticker.MaxNLocator(nbins=5)
+    tick_locator = MaxNLocator(nbins=5)
     cbar.locator = tick_locator
+    cbar.formatter.set_powerlimits((0, 0))
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
@@ -154,8 +156,9 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
     cbar = plt.colorbar(cs, cax=cax)
-    tick_locator = ticker.MaxNLocator(nbins=5)
+    tick_locator = MaxNLocator(nbins=5)
     cbar.locator = tick_locator
+    cbar.formatter.set_powerlimits((0, 0))
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
