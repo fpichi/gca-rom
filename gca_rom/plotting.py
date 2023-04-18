@@ -79,7 +79,7 @@ def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params
     ax.contour(X1, X2, output, zdir='z', offset=output.min(), cmap=cm.coolwarm)
     ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]), ylim=tuple([mu2_range[0], mu2_range[-1]]), xlabel='$\mu_1$', ylabel='$\mu_2$', zlabel='$\\epsilon_{GCA}(\\mathbf{\mu})$')
     ax.plot(params[train_trajectories,0], params[train_trajectories,1], output.min()*np.ones(len(params[train_trajectories,1])), '*r')
-    plt.ticklabel_format(axis='z', style='sci', scilimits=(0,0))
+    plt.ticklabel_format(axis='z', style='sci', scilimits=(0, 0))
     ax.set_title('Relative Error '+vars)
     plt.tight_layout()
     plt.savefig(AE_Params.net_dir+'relative_error_'+vars+AE_Params.net_run+'.png', transparent=True, dpi=300)
@@ -109,8 +109,8 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     ax = plt.subplot(gs1[0, 0])
     Z_net = scaling.inverse_scaling(results, scaler_all, AE_Params.scaling_type)
     z_net = Z_net[:, SNAP]
-    ax.triplot(xx[:,SNAP], yy[:,SNAP], triang, lw=0.5, color='black')
-    cs = ax.tricontourf(xx[:,SNAP], yy[:,SNAP], triang, z_net, 100, cmap=cmap)
+    ax.triplot(xx[:, SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
+    cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=cmap)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
     cbar = plt.colorbar(cs, cax=cax)
@@ -120,7 +120,7 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
-    ax.set_title('Solution field for mu = '+str(params[SNAP].detach().numpy()), fontsize=15)
+    ax.set_title('Solution field for mu = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
     plt.savefig(AE_Params.net_dir+'field_solution_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight')
 
 
@@ -152,8 +152,8 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx
     z = Z[:, SNAP]
     z_net = Z_net[:, SNAP]
     error = abs(z - z_net)/np.linalg.norm(z, 2)
-    ax.triplot(xx[:,SNAP], yy[:,SNAP], triang, lw=0.5, color='black')
-    cs = ax.tricontourf(xx[:,SNAP], yy[:,SNAP], triang, error, 100, cmap=cmap)
+    ax.triplot(xx[:,SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
+    cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error, 100, cmap=cmap)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
     cbar = plt.colorbar(cs, cax=cax)
@@ -163,5 +163,5 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
-    ax.set_title('Error solution for mu = '+str(params[SNAP].detach().numpy()), fontsize=15)
+    ax.set_title('Error field for mu = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
     plt.savefig(AE_Params.net_dir+'error_field_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight')

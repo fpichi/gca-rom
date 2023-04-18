@@ -2,7 +2,7 @@ import os
 
 # HYPER-PARAMETERS FOR POISSON
 problem_names = ["VX_navier_stokes", "VY_navier_stokes",  "P_navier_stokes"]
-comp = 2
+comp = 0
 problem_name = problem_names[comp]
 scalers_type = "sampling-feature"
 scalers_fun = "standard"
