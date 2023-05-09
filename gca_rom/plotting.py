@@ -7,6 +7,12 @@ from matplotlib import ticker
 from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+params = {'legend.fontsize': 'x-large',
+         'axes.labelsize': 'x-large',
+         'axes.titlesize':'x-large',
+         'xtick.labelsize':'x-large',
+         'ytick.labelsize':'x-large'}
+plt.rcParams.update(params)
 
 def plot_loss(AE_Params):
     """
@@ -27,7 +33,7 @@ def plot_loss(AE_Params):
     plt.ylabel('Epochs')
     plt.title('Loss over training epochs')
     plt.legend(['loss_mse', 'loss_map', 'loss_test_mse', 'loss_test_map'])
-    plt.savefig(AE_Params.net_dir+'history_losses'+AE_Params.net_run+'.png', bbox_inches='tight')
+    plt.savefig(AE_Params.net_dir+'history_losses'+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)
 
 
 def plot_latent(AE_Params, latents, latents_estimation):
@@ -49,7 +55,7 @@ def plot_latent(AE_Params, latents, latents_estimation):
     green_diamond = dict(markerfacecolor='g', marker='D')
     _, ax = plt.subplots()
     ax.boxplot(latents_estimation.detach().numpy(), flierprops=green_diamond)
-    plt.savefig(AE_Params.net_dir+'box_plot_latents'+AE_Params.net_run+'.png', bbox_inches='tight')
+    plt.savefig(AE_Params.net_dir+'box_plot_latents'+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)
     
 
 def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params, train_trajectories, vars):
@@ -82,7 +88,7 @@ def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params
     plt.ticklabel_format(axis='z', style='sci', scilimits=(0, 0))
     ax.set_title('Relative Error '+vars)
     plt.tight_layout()
-    plt.savefig(AE_Params.net_dir+'relative_error_'+vars+AE_Params.net_run+'.png', transparent=True, dpi=300)
+    plt.savefig(AE_Params.net_dir+'relative_error_'+vars+AE_Params.net_run+'.png', transparent=True, dpi=500)
 
 
 def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
@@ -109,7 +115,7 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     ax = plt.subplot(gs1[0, 0])
     Z_net = scaling.inverse_scaling(results, scaler_all, AE_Params.scaling_type)
     z_net = Z_net[:, SNAP]
-    ax.triplot(xx[:, SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
+    # ax.triplot(xx[:, SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
     cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=cmap)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
@@ -120,8 +126,8 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
-    ax.set_title('Solution field for mu = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
-    plt.savefig(AE_Params.net_dir+'field_solution_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight')
+    ax.set_title('Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
+    plt.savefig(AE_Params.net_dir+'field_solution_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)
 
 
 def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx, yy, params):
@@ -152,7 +158,7 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx
     z = Z[:, SNAP]
     z_net = Z_net[:, SNAP]
     error = abs(z - z_net)/np.linalg.norm(z, 2)
-    ax.triplot(xx[:,SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
+    # ax.triplot(xx[:,SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
     cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error, 100, cmap=cmap)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
@@ -163,5 +169,5 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
-    ax.set_title('Error field for mu = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
-    plt.savefig(AE_Params.net_dir+'error_field_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight')
+    ax.set_title('Error field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
+    plt.savefig(AE_Params.net_dir+'error_field_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)
