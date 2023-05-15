@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gca_rom package &mdash; gca-rom  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="gca_rom" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> gca-rom
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">gca_rom</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">gca_rom package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.error">gca_rom.error module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.gca">gca_rom.gca module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.initialization">gca_rom.initialization module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.loader">gca_rom.loader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gca-rom-network-module">gca_rom.network module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.pde">gca_rom.pde module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.plotting">gca_rom.plotting module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.preprocessing">gca_rom.preprocessing module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.scaling">gca_rom.scaling module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.testing">gca_rom.testing module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom.training">gca_rom.training module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gca_rom">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gca-rom</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">gca_rom</a></li>
+      <li class="breadcrumb-item active">gca_rom package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/gca_rom.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gca-rom-package">
+<h1>gca_rom package<a class="headerlink" href="#gca-rom-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-gca_rom.error">
+<span id="gca-rom-error-module"></span><h2>gca_rom.error module<a class="headerlink" href="#module-gca_rom.error" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.error.compute_error">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.error.</span></span><span class="sig-name descname"><span class="pre">compute_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VAR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.error.compute_error" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the absolute error and norm between the original data and the data generated by the autoencoder</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res</strong> – Resulting data generated by the autoencoder (numpy ndarray)</p></li>
+<li><p><strong>VAR</strong> – Original data (numpy ndarray)</p></li>
+<li><p><strong>scaler</strong> – Scaler object for scaling the data</p></li>
+<li><p><strong>AE_Params</strong> – Autoencoder parameters (object)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>error_abs_list, norm_z_list, lists of absolute error and norm for each snapshot of data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.error.print_error">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.error.</span></span><span class="sig-name descname"><span class="pre">print_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.error.print_error" title="Permalink to this definition"></a></dt>
+<dd><p>This function takes in two lists error and norm of same length and prints their absolute and relative errors, along with the max, mean and min of both the absolute and relative errors.</p>
+<p>The relative error is calculated as error/norm for each corresponding elements.</p>
+<p>Parameters:
+error (List[float]): A list of error values.
+norm (List[float]): A list of norm values of same length as error.
+vars (str): A string to describe the type of field.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.error.save_error">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.error.</span></span><span class="sig-name descname"><span class="pre">save_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.error.save_error" title="Permalink to this definition"></a></dt>
+<dd><p>This function takes in two lists of same length, error and norm, computed on the whole dataset for plotting reasons, and saves the relative error, along with the max, mean and min to a txt file.</p>
+<p>The relative error is calculated as error/norm for each corresponding element. The file is saved with a specific naming convention: AE_Params.net_dir + ‘relative_errors’ + AE_Params.net_run + vars + ‘.txt’</p>
+<p>Parameters:
+error (List[float]): A list of error values.
+norm (List[float]): A list of norm values of same length as error.
+AE_Params (object): An object containing information required to form the file name.
+vars (str): A string to be appended to the file name.</p>
+</dd></dl>
+
+</section>
+<section id="module-gca_rom.gca">
+<span id="gca-rom-gca-module"></span><h2>gca_rom.gca module<a class="headerlink" href="#module-gca_rom.gca" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="gca_rom.gca.Decoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gca_rom.gca.</span></span><span class="sig-name descname"><span class="pre">Decoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottleneck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act=&lt;function</span> <span class="pre">elu&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Decoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class Decoder
+A torch.nn.Module subclass for the decoder part of a neural network.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>hidden_channels (list of ints): A list of hidden channel sizes.
+depth (int): The length of hidden_channels list.
+act (function): Activation function to use.
+ffn (int): Size of output after the first linear layer.
+skip (bool): Whether to add skip connections.
+bottleneck (int): Size of bottleneck layer.
+input_size (int): Size of input data.
+fc_out1 (torch.nn.Linear): Linear layer from bottleneck to ffn.
+fc_out2 (torch.nn.Linear): Linear layer from ffn to input_size * hidden_channels[-1].
+up_convs (torch.nn.ModuleList): A list of GMMConv layers.</p>
+</dd>
+<dt>Methods:</dt><dd><dl class="simple">
+<dt>decoder(self, x, data):</dt><dd><p>Decodes the input data x and returns the output.</p>
+</dd>
+<dt>reset_parameters(self):</dt><dd><p>Resets the parameters of the up_convs layer.</p>
+</dd>
+<dt>forward(self, x, data):</dt><dd><p>Performs a forward pass on the input data x and returns the output.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Decoder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottleneck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act=&lt;function</span> <span class="pre">elu&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Decoder.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Decoder.decoder">
+<span class="sig-name descname"><span class="pre">decoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Decoder.decoder" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Decoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Decoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Decoder.reset_parameters">
+<span class="sig-name descname"><span class="pre">reset_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Decoder.reset_parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gca_rom.gca.Encoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gca_rom.gca.</span></span><span class="sig-name descname"><span class="pre">Encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottleneck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act=&lt;function</span> <span class="pre">elu&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Encoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Encoder Class</p>
+<p>The Encoder class is a subclass of torch.nn.Module that implements a deep neural network for encoding graph data.</p>
+<p>It uses the Gaussian Mixture convolution (GMMConv) module to extract features from the graph structure and node features.
+The encoding is then passed through a feed-forward neural network with two fully connected layers to produce the final encoding.</p>
+<p>Arguments:
+hidden_channels (list): A list of hidden channel sizes for each layer of the GMMConv module.
+bottleneck (int): Size of the bottleneck layer in the feed-forward neural network.
+input_size (int): Size of the node features.
+ffn (int): Size of the intermediate layer in the feed-forward neural network.
+skip (bool): If True, the input node features will be concatenated with the GMMConv output at each layer.
+act (function): Activation function used in the GMMConv layers and feed-forward neural network. Defaults to F.elu.</p>
+<p>Methods:
+encoder(data): Encodes the graph data using the GMMConv module and feed-forward neural network.
+reset_parameters(): Resets the parameters of the GMMConv layers and feed-forward neural network.
+forward(data): A convenience function that calls the encoder method.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Encoder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hidden_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottleneck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ffn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">act=&lt;function</span> <span class="pre">elu&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Encoder.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Encoder.encoder">
+<span class="sig-name descname"><span class="pre">encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Encoder.encoder" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Encoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Encoder.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.gca.Encoder.reset_parameters">
+<span class="sig-name descname"><span class="pre">reset_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.gca.Encoder.reset_parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-gca_rom.initialization">
+<span id="gca-rom-initialization-module"></span><h2>gca_rom.initialization module<a class="headerlink" href="#module-gca_rom.initialization" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.initialization.set_device">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.initialization.</span></span><span class="sig-name descname"><span class="pre">set_device</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.initialization.set_device" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the device to be used (GPU or CPU)</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>device (str): The device to be used (‘cuda’ if GPU is available, ‘cpu’ otherwise)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.initialization.set_path">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.initialization.</span></span><span class="sig-name descname"><span class="pre">set_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.initialization.set_path" title="Permalink to this definition"></a></dt>
+<dd><p>Creates the directory path to store the network results.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>AE_Params (class): Contains the hyperparameters of the autoencoder</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.initialization.set_reproducibility">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.initialization.</span></span><span class="sig-name descname"><span class="pre">set_reproducibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.initialization.set_reproducibility" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the seed for reproducibility of results.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>AE_Params (class): Contains the hyperparameters of the autoencoder</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gca_rom.loader">
+<span id="gca-rom-loader-module"></span><h2>gca_rom.loader module<a class="headerlink" href="#module-gca_rom.loader" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="gca_rom.loader.LoadDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gca_rom.loader.</span></span><span class="sig-name descname"><span class="pre">LoadDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.loader.LoadDataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>A custom dataset class which loads data from a .mat file using scipy.io.loadmat.</p>
+<dl class="simple">
+<dt>data_mat<span class="classifier">scipy.io.loadmat</span></dt><dd><p>The loaded data in a scipy.io.loadmat object.</p>
+</dd>
+<dt>U<span class="classifier">torch.Tensor</span></dt><dd><p>The tensor representation of the specified variable from the data_mat.</p>
+</dd>
+<dt>xx<span class="classifier">torch.Tensor</span></dt><dd><p>The tensor representation of the ‘xx’ key from the data_mat. Refers to X coordinates of the domain</p>
+</dd>
+<dt>yy<span class="classifier">torch.Tensor</span></dt><dd><p>The tensor representation of the ‘yy’ key from the data_mat.Refers to Y coordinates of the domain</p>
+</dd>
+<dt>T<span class="classifier">torch.Tensor</span></dt><dd><p>The tensor representation of the ‘T’ key from the data_mat, casted to int. Adjacency Matrix</p>
+</dd>
+<dt>E<span class="classifier">torch.Tensor</span></dt><dd><p>The tensor representation of the ‘E’ key from the data_mat, casted to int. Connection Matrix</p>
+</dd>
+<dt>__init__(self, root_dir, variable)</dt><dd><p>Initializes the LoadDataset object by loading the data from the .mat file at the root_dir location and converting the specified variable to a tensor representation.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gca_rom.loader.LoadDataset.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.loader.LoadDataset.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="gca-rom-network-module">
+<h2>gca_rom.network module<a class="headerlink" href="#gca-rom-network-module" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-gca_rom.pde">
+<span id="gca-rom-pde-module"></span><h2>gca_rom.pde module<a class="headerlink" href="#module-gca_rom.pde" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.pde.problem">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.pde.</span></span><span class="sig-name descname"><span class="pre">problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argument</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gca_rom.pde.problem" title="Permalink to this definition"></a></dt>
+<dd><p>This function takes in an integer argument and returns a tuple containing the problem name (str), variable name (str), mu1 (np.ndarray) and mu2 (np.ndarray) for the specified case.</p>
+<p>The possible values of argument are:</p>
+<p>Poisson problem
+Advection problem
+Graetz problem
+Navier-Stokes problem (variable = VX)
+Navier-Stokes problem (variable = VY)
+Navier-Stokes problem (variable = P)
+Returns:
+Tuple containing the problem name (str), variable name (str), mu1 (np.ndarray) and mu2 (np.ndarray) for the specified case.</p>
+</dd></dl>
+
+</section>
+<section id="module-gca_rom.plotting">
+<span id="gca-rom-plotting-module"></span><h2>gca_rom.plotting module<a class="headerlink" href="#module-gca_rom.plotting" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.plotting.plot_error">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VAR_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu1_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu2_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_trajectories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.plotting.plot_error" title="Permalink to this definition"></a></dt>
+<dd><p>This function plots the relative error between the predicted and actual results.</p>
+<p>Parameters:
+res (ndarray): The predicted results
+VAR_all (ndarray): The actual results
+scaler_all (object): The scaler object used for scaling the results
+AE_Params (object): The AE_Params object holding the necessary hyperparameters
+mu1_range (ndarray): Range of the first input variable
+mu2_range (ndarray): Range of the second input variable
+params (ndarray): The input variables
+train_trajectories (ndarray): The indices of the training data
+vars (str): The name of the variable being plotted</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.plotting.plot_error_fields">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_error_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SNAP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VAR_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.plotting.plot_error_fields" title="Permalink to this definition"></a></dt>
+<dd><p>This function plots a contour map of the error field of a given solution of a scalar field.
+The error is computed as the absolute difference between the true solution and the predicted solution,
+normalized by the 2-norm of the true solution.</p>
+<p>Inputs:
+SNAP: int, snapshot of the solution to be plotted
+results: np.array, predicted solution
+VAR_all: np.array, true solution
+scaler_all: np.array, scaling information used in the prediction
+AE_Params: class, model architecture and training parameters
+dataset: np.array, mesh information
+xx: np.array, x-coordinate of the mesh
+yy: np.array, y-coordinate of the mesh
+params: np.array, model parameters</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.plotting.plot_fields">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SNAP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler_all</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.plotting.plot_fields" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the field solution for a given snapshot.</p>
+<p>The function takes in the following inputs:</p>
+<p>SNAP: integer value indicating the snapshot to be plotted.
+results: array of shape (num_samples, num_features), representing the network’s output.
+scaler_all: instance of the scaler used to scale the data.
+AE_Params: instance of the Autoencoder parameters class containing information about the network architecture and training.
+dataset: array of shape (num_samples, 3), representing the triangulation of the spatial domain.
+xx: array of shape (num_samples, num_features), containing the x-coordinates of the domain.
+yy: array of shape (num_samples, num_features), containing the y-coordinates of the domain.
+params: array of shape (num_features,), containing the parameters associated with each snapshot.
+The function generates a plot of the field solution and saves it to disk using the filepath specified in AE_Params.net_dir.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.plotting.plot_latent">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_latent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latents_estimation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.plotting.plot_latent" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the original and estimated latent spaces</p>
+<p>Parameters:
+AE_Params (obj): object containing the Autoencoder parameters 
+latents (tensor): tensor of original latent spaces
+latents_estimation (tensor): tensor of estimated latent spaces</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.plotting.plot_loss">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.plotting.</span></span><span class="sig-name descname"><span class="pre">plot_loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.plotting.plot_loss" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the history of losses during the training of the autoencoder.</p>
+<p>Attributes:
+AE_Params (namedtuple): An object containing the parameters of the autoencoder.</p>
+</dd></dl>
+
+</section>
+<section id="module-gca_rom.preprocessing">
+<span id="gca-rom-preprocessing-module"></span><h2>gca_rom.preprocessing module<a class="headerlink" href="#module-gca_rom.preprocessing" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.preprocessing.graphs_dataset">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.preprocessing.</span></span><span class="sig-name descname"><span class="pre">graphs_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.preprocessing.graphs_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>graphs_dataset: function to process and scale the input dataset for graph autoencoder model.</p>
+<p>Inputs:
+dataset: an object containing the dataset to be processed.
+AE_Params: an object containing the hyperparameters of the graph autoencoder model.</p>
+<p>Outputs:
+dataset_graph: an object containing the processed and scaled dataset.
+loader: a DataLoader object of the processed and scaled dataset.
+train_loader: a DataLoader object of the training set.
+test_loader: a DataLoader object of the test set.
+val_loader: a DataLoader object of the validation set.
+scaler_all: a scaler object to scale the entire dataset.
+scaler_test: a scaler object to scale the test set.
+xx: an array of the x-coordinate of the nodes.
+yy: an array of the y-coordinate of the nodes.
+var: an array of the node features.
+VAR_all: an array of the scaled node features of the entire dataset.
+VAR_test: an array of the scaled node features of the test set.
+train_snapshots: a list of indices of the training set.
+test_snapshots: a list of indices of the test set.</p>
+</dd></dl>
+
+</section>
+<section id="module-gca_rom.scaling">
+<span id="gca-rom-scaling-module"></span><h2>gca_rom.scaling module<a class="headerlink" href="#module-gca_rom.scaling" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.scaling.inverse_scaling">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.scaling.</span></span><span class="sig-name descname"><span class="pre">inverse_scaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.scaling.inverse_scaling" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.scaling.scaler_functions">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.scaling.</span></span><span class="sig-name descname"><span class="pre">scaler_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.scaling.scaler_functions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.scaling.tensor_scaling">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.scaling.</span></span><span class="sig-name descname"><span class="pre">tensor_scaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.scaling.tensor_scaling" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-gca_rom.testing">
+<span id="gca-rom-testing-module"></span><h2>gca_rom.testing module<a class="headerlink" href="#module-gca_rom.testing" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.testing.evaluate">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.testing.</span></span><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">VAR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.testing.evaluate" title="Permalink to this definition"></a></dt>
+<dd><p>This function evaluates the performance of a trained Autoencoder (AE) model.
+It encodes the input data using both the model’s encoder and a mapping function,
+and decodes the resulting latent representations to obtain predicted solutions.
+The relative error between the two latent representations is also computed.</p>
+<p>Inputs:
+VAR: np.array, ground truth solution
+model: object, trained AE model
+loader: object, data loader for the input data
+params: np.array, model parameters
+AE_Params: class, model architecture and training parameters</p>
+<p>Returns:
+results: np.array, predicted solutions
+latents_map: np.array, latent representations obtained using the mapping function
+latents_gca: np.array, latent representations obtained using the AE encoder</p>
+</dd></dl>
+
+</section>
+<section id="module-gca_rom.training">
+<span id="gca-rom-training-module"></span><h2>gca_rom.training module<a class="headerlink" href="#module-gca_rom.training" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.training.train">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.training.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_trajectories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.training.train" title="Permalink to this definition"></a></dt>
+<dd><p>Trains the autoencoder model.</p>
+<p>This function trains the autoencoder model using mean squared error (MSE) loss and a map loss, where the map loss
+is the MSE between the estimated z (latent space) and the actual z. The final loss is the sum of the MSE loss and the
+map loss multiplied by the weight <cite>AE_Params.lambda_map</cite>. The model is trained on the data from <cite>train_loader</cite> and 
+the optimization process is performed using the <cite>optimizer</cite>. The learning rate is updated after every iteration 
+using <cite>scheduler</cite>. Use of mini-batching for reducing the computational cost.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>model (torch.nn.Module): The autoencoder model to be trained.
+optimizer (torch.optim.Optimizer): The optimizer to update the model parameters.
+device (str): The device to run the model on (‘cuda’ or ‘cpu’).
+scheduler (torch.optim.lr_scheduler._LRScheduler): The learning rate scheduler to update the learning rate.
+params (torch.Tensor): Tensor containing the parameters of the model.
+train_loader (torch.utils.data.DataLoader): The data loader to provide the training data.
+train_trajectories (int): The number of training trajectories.
+AE_Params (dict): The dictionary containing the hyperparameters for the autoencoder model.
+history (dict): The dictionary to store the loss history.</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: The average loss over all training examples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gca_rom.training.val">
+<span class="sig-prename descclassname"><span class="pre">gca_rom.training.</span></span><span class="sig-name descname"><span class="pre">val</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_loader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_trajectories</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AE_Params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history_test</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gca_rom.training.val" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate the performance of a model on a test set.</p>
+<p>This function calculates the mean of the total loss, the mean of loss_test_mse and the mean of loss_test_map for all test examples. The losses are computed as the mean squared error (MSE) between the model’s predictions and the true target variables, and between the estimated latent code and the true latent code. The lambda_map weight balances the contribution of each loss term to the total loss. The function adds the computed loss values to the history_test dictionary.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><p>model (torch.nn.Module): The model to be evaluated.
+device (torch.device): The device to use for computations (e.g. ‘cpu’ or ‘cuda’).
+params (torch.Tensor): Tensor containing the parameters of the model.
+test_loader (torch.utils.data.DataLoader): The test data to use for evaluation.
+test_trajectories (int): The index of the test trajectory.
+AE_Params (object): Object containing hyperparameters for the model.
+history_test (dict): Dictionary to store the evaluation results.</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: The mean of the total loss computed over all test examples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gca_rom">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gca_rom" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="gca_rom" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Federico Pichi, Beatriz Moya, Jan S. Hesthaven.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
