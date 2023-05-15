@@ -225,7 +225,7 @@ for n, (name, model) in enumerate(zip(problem_names, model_names)):
                     ax.tick_params(axis='both', which='major', labelsize=fontsize)
                     ax.tick_params(axis='both', which='minor', labelsize=fontsize)
                     ax.tick_params(labelsize=fontsize)
-                    for mm in [nn - 1 for nn in range(0, n_vars*(n_vars - 1) + 1, n_vars - 1)[1:]]:
+                    if j in [nn - 1 for nn in range(0, n_vars*(n_vars - 1) + 1, n_vars - 1)[1:]]:
                         ax.legend(title=x_vars_title[c+counter], title_fontsize=fontsize)
                         sns.move_legend(ax, "center left", bbox_to_anchor=(1., 0.5), ncol=1, frameon=False, fontsize=fontsize)
                 g1.savefig('../plots/'+str(model)+'/tmp/g1_'+str(j)+'_'+str(name)+'.png', dpi=500)
@@ -238,7 +238,7 @@ for n, (name, model) in enumerate(zip(problem_names, model_names)):
                     ax.tick_params(axis='both', which='major', labelsize=fontsize)
                     ax.tick_params(axis='both', which='minor', labelsize=fontsize)
                     ax.tick_params(labelsize=fontsize)
-                    for mm in [nn - 1 for nn in range(0, n_vars*(n_vars - 1) + 1, n_vars - 1)[1:]]:
+                    if j in [nn - 1 for nn in range(0, n_vars*(n_vars - 1) + 1, n_vars - 1)[1:]]:
                         ax.legend(title=x_vars_title[c+counter], title_fontsize=fontsize)
                         sns.move_legend(ax, "center left", bbox_to_anchor=(1., 0.5), ncol=1, frameon=False, fontsize=fontsize)
                 g2.savefig('../plots/'+str(model)+'/tmp/g2_'+str(j)+'_'+str(name)+'.png', dpi=500)
