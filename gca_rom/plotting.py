@@ -87,6 +87,9 @@ def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params
     ax.plot(params[train_trajectories,0], params[train_trajectories,1], output.min()*np.ones(len(params[train_trajectories,1])), '*r')
     plt.ticklabel_format(axis='z', style='sci', scilimits=(0, 0))
     ax.set_title('Relative Error '+vars)
+    ax.zaxis.offsetText.set_visible(False)
+    exponent_axis = np.floor(np.log10(max(ax.get_zticks()))).astype(int)
+    ax.text2D(0.9, 0.82, "1e"+str(exponent_axis), transform=ax.transAxes, fontsize="x-large")
     plt.tight_layout()
     plt.savefig(AE_Params.net_dir+'relative_error_'+vars+AE_Params.net_run+'.png', transparent=True, dpi=500)
 
