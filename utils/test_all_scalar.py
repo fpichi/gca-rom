@@ -24,6 +24,13 @@ btt_nodes = [15, 25]
 lambda_map = [1e-1, 1e0, 1e1]
 hidden_channels = [1, 2, 3]
 
+# BEST_U_poisson_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30
+# BEST_U_advection_lmap10.0_btt15_seed10_lv4_hc2_nd100_ffn200_skip1_lr0.001_sc4_rate30
+# BEST_U_graetz_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30
+# BEST_VX_navier_stokes_rid_lmap10.0_btt25_seed10_lv4_hc2_nd100_ffn300_skip1_lr0.001_sc4_rate30
+# BEST_VY_navier_stokes_rid_lmap1.0_btt25_seed10_lv4_hc2_nd100_ffn300_skip1_lr0.001_sc4_rate30
+# BEST_P_navier_stokes_rid_lmap1.0_btt25_seed10_lv4_hc2_nd100_ffn200_skip1_lr0.001_sc4_rate30
+
 index_pb = [problem_names_list.index(pb)+1 for pb in problem_names]
 index_st = [scalers_type_list.index(st)+1 for st in scalers_type]
 index_sf = [scalers_fun_list.index(sf)+1 for sf in scalers_fun]

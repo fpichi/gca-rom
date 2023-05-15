@@ -126,7 +126,7 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
-    ax.set_title('Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
+    ax.set_title('Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
     plt.savefig(AE_Params.net_dir+'field_solution_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)
 
 
@@ -169,5 +169,5 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
-    ax.set_title('Error field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)), fontsize=15)
+    ax.set_title('Error field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
     plt.savefig(AE_Params.net_dir+'error_field_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)

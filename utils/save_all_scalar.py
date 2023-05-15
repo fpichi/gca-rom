@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import warnings
 import seaborn as sns
-import shutil
 import os
 warnings.filterwarnings("ignore")
 
@@ -186,12 +185,14 @@ for i, (name, model, var) in enumerate(zip(problem_names, model_names, variable_
 columns_names = ["train_rates", "ffn_nodes", "latent_nodes", "btt_nodes", "lambda_map", "hidden_channels", "error"]
 list_hyper = [train_rates, ffn_nodes, latent_nodes, btt_nodes, lambda_map, hidden_channels]
 x_vars = ["train_rates", "ffn_nodes", "latent_nodes", "btt_nodes", "lambda_map", "hidden_channels"]
+x_vars_title = ["$r_t$", "ffn", "$n_l$", "$n$", "$\lambda$", "hc"]
 y_vars = ["error"]
+n_vars = len(x_vars)
 
 mark =["o", "s", "D"]
 line =["-", "--", "-."]
 
-def pairplot_box(data, xv, c, hue_var):
+def pairplot_box(data, xv, hue_var):
     sns.set(style="ticks")
     return sns.catplot(data=data, x=xv, y=y_vars[0], hue=hue_var, kind="box")
 
@@ -200,27 +201,50 @@ def pairplot_point(data, xv, c, hue_var):
     return sns.catplot(data=data, x=xv, y=y_vars[0], hue=hue_var, linestyles=line[:len(list_hyper[c])], markers=mark[:len(list_hyper[c])], kind="point")
     # return sns.pairplot(data[columns_names], x_vars=x_vars, y_vars=y_vars, hue=hue_var, markers=mark[:len(col)])
 
+fontsize = 25
 for n, (name, model) in enumerate(zip(problem_names, model_names)):
     data_name = data[data["problem_names"]==n]
     # print("Dataset name shape: ", data_name.shape)
     # print("Dataset name: ", data_name)
     j = 0
     for c, col in enumerate(x_vars):
-        for xv in x_vars:
-            if xv != col:
-                g1 = pairplot_box(data_name, xv, c, col)
+        for tit, xv in enumerate(x_vars):
+            counter = 0
+            if xv == col:
+                counter += 1
+            else:
+                g1 = pairplot_box(data_name, xv, col)
                 g2 = pairplot_point(data_name, xv, c, col)
+                g1._legend.remove()
+                g2._legend.remove()
                 for ax in g1.axes.flat:
                     if ax.get_ylabel() in y_vars:
                         ax.set(yscale="log")
+                    ax.set_xlabel(x_vars_title[tit+counter], fontsize=fontsize)
+                    ax.set_ylabel(y_vars[0], fontsize=fontsize)
+                    ax.tick_params(axis='both', which='major', labelsize=fontsize)
+                    ax.tick_params(axis='both', which='minor', labelsize=fontsize)
+                    ax.tick_params(labelsize=fontsize)
+                    for mm in [nn - 1 for nn in range(0, n_vars*(n_vars - 1) + 1, n_vars - 1)[1:]]:
+                        ax.legend(title=x_vars_title[c+counter], title_fontsize=fontsize)
+                        sns.move_legend(ax, "center left", bbox_to_anchor=(1., 0.5), ncol=1, frameon=False, fontsize=fontsize)
+                g1.savefig('../plots/'+str(model)+'/tmp/g1_'+str(j)+'_'+str(name)+'.png', dpi=500)
+                plt.close(g1.fig)
                 for ax in g2.axes.flat:
                     if ax.get_ylabel() in y_vars:
                         ax.set(yscale="log")
-                g1.savefig('../plots/'+str(model)+'/tmp/g1_'+str(j)+'_'+str(name)+'.png', dpi=500)
+                    ax.set_xlabel(x_vars_title[tit+counter], fontsize=fontsize)
+                    ax.set_ylabel(y_vars[0], fontsize=fontsize)
+                    ax.tick_params(axis='both', which='major', labelsize=fontsize)
+                    ax.tick_params(axis='both', which='minor', labelsize=fontsize)
+                    ax.tick_params(labelsize=fontsize)
+                    for mm in [nn - 1 for nn in range(0, n_vars*(n_vars - 1) + 1, n_vars - 1)[1:]]:
+                        ax.legend(title=x_vars_title[c+counter], title_fontsize=fontsize)
+                        sns.move_legend(ax, "center left", bbox_to_anchor=(1., 0.5), ncol=1, frameon=False, fontsize=fontsize)
                 g2.savefig('../plots/'+str(model)+'/tmp/g2_'+str(j)+'_'+str(name)+'.png', dpi=500)
-                j += 1
-                plt.close(g1.fig)
                 plt.close(g2.fig)
+                j += 1
+
 
     f1, axarr1 = plt.subplots(len(x_vars), len(x_vars[:-1]), figsize=(20, 20))
     f2, axarr2 = plt.subplots(len(x_vars), len(x_vars[:-1]), figsize=(20, 20))

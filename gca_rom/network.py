@@ -38,29 +38,30 @@ class AE_Params():
     """
 
     def __init__(self):
-        self.sparse_method = 'L1_mean'
+        self.scaling_type = int(sys.argv[2])
+        _, self.scaler_name = scaling.scaler_functions(int(sys.argv[3]))
+        self.skip = int(sys.argv[4])
         self.rate = int(sys.argv[5])
-        self.seed = 10
-        self.bottleneck_dim = int(sys.argv[8])
-        self.tolerance = 1e-6
-        self.lambda_map = float(sys.argv[9])
-        self.learning_rate = 0.001
+        self.sparse_method = 'L1_mean'
         self.ffn = int(sys.argv[6])
+        self.nodes = int(sys.argv[7])
+        self.bottleneck_dim = int(sys.argv[8])
+        self.lambda_map = float(sys.argv[9])
         self.in_channels = int(sys.argv[10])
+        self.seed = 10
+        self.tolerance = 1e-6
+        self.learning_rate = 0.001
         self.hidden_channels = [1]*self.in_channels
         self.act = torch.tanh
-        self.nodes = int(sys.argv[7])
-        self.skip = int(sys.argv[4])
         self.layer_vec=[2, self.nodes, self.nodes, self.nodes, self.nodes, self.bottleneck_dim]
         self.net_name = problem_name
-        _, self.scaler_name = scaling.scaler_functions(int(sys.argv[3]))
         self.net_run = '_' + self.scaler_name
         self.weight_decay = 0.00001
         self.max_epochs = 5000
         self.miles = []
         self.gamma = 0.0001
         self.num_nodes = 0
-        self.scaling_type = int(sys.argv[2])
+
         self.net_dir = './' + problem_name + '/' + self.net_run+ '/' + variable + '_' + self.net_name + '_lmap' + str(self.lambda_map) + '_btt' + str(self.bottleneck_dim) \
                             + '_seed' + str(self.seed) + '_lv' + str(len(self.layer_vec)-2) + '_hc' + str(len(self.hidden_channels)) + '_nd' + str(self.nodes) \
                             + '_ffn' + str(self.ffn) + '_skip' + str(self.skip) + '_lr' + str(self.learning_rate) + '_sc' + str(self.scaling_type) + '_rate' + str(self.rate) + '/'
