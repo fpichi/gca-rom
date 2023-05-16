@@ -36,8 +36,16 @@ encoder, but in reverse order.</li>
 If you use GCA-ROM for academic research, you are encouraged to cite the following paper:
 
 ```
-@article{,
-
+@misc{PichiGraphConvolutionalAutoencoder2023,
+  title = {A Graph Convolutional Autoencoder Approach to Model Order Reduction for Parametrized {{PDEs}}},
+  author = {Pichi, Federico and Moya, Beatriz and Hesthaven, Jan S.},
+  year = {2023},
+  number = {arXiv:2305.08573},
+  eprint = {2305.08573},
+  primaryclass = {cs, math},
+  publisher = {{arXiv}},
+  doi = {10.48550/arXiv.2305.08573},
+  archiveprefix = {arxiv}
 }
 ```
 
