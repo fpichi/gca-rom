@@ -2,22 +2,29 @@
 
 GCA-ROM is a library which implements graph convolutional autoencoder architecture as a nonlinear model order reduction strategy.
 
-## Requirements
+## Installation
 
-The required packages are contained in the file requirements.txt, which can be used to create the conda virtual environment with:
+GCA-ROM requires `pytorch`, `pyg`, `matplotlib`, `scipy` and `h5py`. They can be easily installed via `pip` or `conda`.
 
-```
-$ conda create --name <env> --file requirements.txt
+The official distribution is on GitHub, and you can clone the repository using
+
+```bash
+git clone git@github.com:fpichi/gca-rom.git
 ```
 
 ## Summary of GCA-ROM Features
 
 ### - OFFLINE PHASE
-![](docs/images/gca_off_1.png)
+<!-- ![](docs/images/gca_off_1.png) -->
+<p align="center">
+<img src="docs/images/gca_off_1.png"/>
+</p>
 
 ### - ONLINE PHASE
-![](docs/images/gca_on_1.png)
-
+<!-- ![](docs/images/gca_on_1.png) -->
+<p align="center">
+<img src="docs/images/gca_on_1.png" width="70%" height="70%"/>
+</p>
 The proposed modular architecture, namely Graph Convolutional Autoencoder for Reduced Order Modelling (GCA-ROM), subsequently exploits:
 <ol>
 <li> a graph-based layer to express an unstructured dataset;</li>
@@ -33,9 +40,12 @@ encoder, but in reverse order.</li>
 
 ## Cite GCA-ROM
 
-If you use GCA-ROM for academic research, you are encouraged to cite the following paper:
+Pichi, F., Moya, B. and Hesthaven, J.S. (2023) ‘A graph convolutional autoencoder approach to model order reduction for parametrized PDEs’. Available at: [arXiv](https://arxiv.org/abs/2305.08573).
 
-```
+If you use GCA-ROM for academic research, you are encouraged to cite the paper using:
+
+
+```tex
 @misc{PichiGraphConvolutionalAutoencoder2023,
   title = {A Graph Convolutional Autoencoder Approach to Model Order Reduction for Parametrized {{PDEs}}},
   author = {Pichi, Federico and Moya, Beatriz and Hesthaven, Jan S.},
@@ -49,3 +59,10 @@ If you use GCA-ROM for academic research, you are encouraged to cite the followi
 }
 ```
 
+## Authors and contributors
+
+<a href="https://github.com/fpichi/gca-rom/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fpichi/gca-rom" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
