@@ -60,6 +60,14 @@ If you use GCA-ROM for academic research, you are encouraged to cite the paper u
 ```
 
 ## Authors and contributors
+- Federico Pichi (federico.pichi@epfl.ch)
+- Beatriz Moya García (beam@unizar.es)
+
+in collaboration with the MCSS group at EPFL of Prof. Jan S. Hesthaven
+
+<!-- with contributions from:
+
+- Name Surname (name.surname@institute.xy) -->
 
 <a href="https://github.com/fpichi/gca-rom/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=fpichi/gca-rom" />
