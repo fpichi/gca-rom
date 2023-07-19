@@ -1,6 +1,6 @@
 import os
 
-# HYPER-PARAMETERS FOR POISSON
+# HYPER-PARAMETERS FOR DIFFUSION
 problem_name = "diffusion" 
 scalers_type = "sampling-feature"
 scalers_fun = "standard"
