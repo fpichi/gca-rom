@@ -61,7 +61,7 @@ If you use GCA-ROM for academic research, you are encouraged to cite the paper u
 
 ## Authors and contributors
 - Federico Pichi (federico.pichi@epfl.ch)
-- Beatriz Moya García (beam@unizar.es)
+- Beatriz Moya García (beatriz.moya@cnrsatcreate.sg)
 
 in collaboration with the MCSS group at EPFL of Prof. Jan S. Hesthaven
 
