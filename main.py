@@ -17,14 +17,20 @@ initialization.set_path(AE_Params)
 
 dataset_dir = '../dataset/'+problem_name+'_unstructured.mat'
 dataset = loader.LoadDataset(dataset_dir, variable)
+
 dataset_graph, graph_loader, train_loader, test_loader, \
-    val_loader, scaler_all, scaler_test, xx, yy, var, VAR_all, VAR_test, \
+    val_loader, scaler_all, scaler_test, xyz, var, VAR_all, VAR_test, \
         train_trajectories, test_trajectories = preprocessing.graphs_dataset(dataset, AE_Params)
+
+xx = xyz[0]
+yy = xyz[1]
+if dataset.dim == 3:
+    zz = xyz[2]
 
 mu1, mu2 = np.meshgrid(mu1_range, mu2_range)
 params = torch.tensor(np.vstack((mu1.T, mu2.T)).reshape(2, -1).T)
 params = params.to(device)
-print('Shape of parameter space:', params.shape, '\n')
+print('Dimension of parameter space:', params.shape[1], '\n')
 
 model = network.Net()
 model = model.to(device)
@@ -77,8 +83,8 @@ N = 5
 snapshots = np.arange(params.shape[0]).tolist()
 np.random.shuffle(snapshots)
 for SNAP in snapshots[0:N]:
-    plotting.plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params)
-    plotting.plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx, yy, params)
+    plotting.plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xyz, params)
+    plotting.plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xyz, params)
 
 results_test, _, _ = testing.evaluate(VAR_test, model, val_loader, params, AE_Params, test_trajectories)
 

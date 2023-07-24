@@ -6,6 +6,7 @@ import matplotlib.cm as cm
 from matplotlib import ticker
 from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 params = {'legend.fontsize': 'x-large',
          'axes.labelsize': 'x-large',
@@ -94,7 +95,7 @@ def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params
     plt.savefig(AE_Params.net_dir+'relative_error_'+vars+AE_Params.net_run+'.png', transparent=True, dpi=500)
 
 
-def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
+def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xyz, params):
     """
     Plots the field solution for a given snapshot.
 
@@ -105,24 +106,37 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     scaler_all: instance of the scaler used to scale the data.
     AE_Params: instance of the Autoencoder parameters class containing information about the network architecture and training.
     dataset: array of shape (num_samples, 3), representing the triangulation of the spatial domain.
-    xx: array of shape (num_samples, num_features), containing the x-coordinates of the domain.
-    yy: array of shape (num_samples, num_features), containing the y-coordinates of the domain.
+    xyz: list of arrays of shape (num_samples, num_features), containing the x, y and z-coordinates of the domain.
     params: array of shape (num_features,), containing the parameters associated with each snapshot.
     The function generates a plot of the field solution and saves it to disk using the filepath specified in AE_Params.net_dir.
     """
-
-    triang = np.asarray(dataset.T - 1)
-    cmap = cm.get_cmap(name='jet', lut=None)
-    # fig = plt.figure(figsize=(14, 6))
-    gs1 = gridspec.GridSpec(1, 1)
-    ax = plt.subplot(gs1[0, 0])
+    
     Z_net = scaling.inverse_scaling(results, scaler_all, AE_Params.scaling_type)
     z_net = Z_net[:, SNAP]
-    # ax.triplot(xx[:, SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
-    cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=cmap)
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.1)
-    cbar = plt.colorbar(cs, cax=cax)
+    xx = xyz[0]
+    yy = xyz[1]
+    if dataset.dim == 2:
+        triang = np.asarray(dataset.T - 1)
+        cmap = cm.get_cmap(name='jet', lut=None)
+        gs1 = gridspec.GridSpec(1, 1)
+        ax = plt.subplot(gs1[0, 0])
+        cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=cmap)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.1)
+        cbar = plt.colorbar(cs, cax=cax)
+    elif dataset.dim == 3:
+        zz = xyz[2]
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
+        cax = inset_axes(ax, width="5%", height="60%", loc="center left", 
+                         bbox_to_anchor=(1.15, 0., 1, 1), bbox_transform=ax.transAxes, borderpad=0)
+        cmap = cm.get_cmap(name='jet', lut=None) 
+        p = ax.scatter(xx[:, SNAP], yy[:, SNAP], zz[:, SNAP], c=z_net, cmap=cmap, linewidth=0.5)
+        cbar = fig.colorbar(p, ax=ax, cax=cax)
+        ax.set_xlabel('$x$')
+        ax.set_ylabel('$y$')
+        ax.set_zlabel('$z$')
+        ax.locator_params(axis='both', nbins=5)
     tick_locator = MaxNLocator(nbins=5)
     cbar.locator = tick_locator
     cbar.formatter.set_powerlimits((0, 0))
@@ -132,8 +146,7 @@ def plot_fields(SNAP, results, scaler_all, AE_Params, dataset, xx, yy, params):
     ax.set_title('Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
     plt.savefig(AE_Params.net_dir+'field_solution_'+str(SNAP)+''+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)
 
-
-def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx, yy, params):
+def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xyz, params):
     """
     This function plots a contour map of the error field of a given solution of a scalar field.
     The error is computed as the absolute difference between the true solution and the predicted solution,
@@ -146,26 +159,39 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, AE_Params, dataset, xx
     scaler_all: np.array, scaling information used in the prediction
     AE_Params: class, model architecture and training parameters
     dataset: np.array, mesh information
-    xx: np.array, x-coordinate of the mesh
-    yy: np.array, y-coordinate of the mesh
+    xyz: list of arrays of shape (num_samples, num_features), containing the x, y and z-coordinates of the domain.
     params: np.array, model parameters
     """
 
-    triang = np.asarray(dataset.T - 1)
-    cmap = cm.get_cmap(name='jet', lut=None) 
-    # fig = plt.figure(figsize=(14, 6))
-    gs1 = gridspec.GridSpec(1, 1)
-    ax = plt.subplot(gs1[0, 0])   
     Z = scaling.inverse_scaling(VAR_all, scaler_all, AE_Params.scaling_type)
     Z_net = scaling.inverse_scaling(results, scaler_all, AE_Params.scaling_type)
     z = Z[:, SNAP]
     z_net = Z_net[:, SNAP]
     error = abs(z - z_net)/np.linalg.norm(z, 2)
-    # ax.triplot(xx[:,SNAP], yy[:, SNAP], triang, lw=0.5, color='black')
-    cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error, 100, cmap=cmap)
-    divider = make_axes_locatable(ax)
-    cax = divider.append_axes("right", size="5%", pad=0.1)
-    cbar = plt.colorbar(cs, cax=cax)
+    xx = xyz[0]
+    yy = xyz[1]
+    if dataset.dim == 2:
+        triang = np.asarray(dataset.T - 1)
+        cmap = cm.get_cmap(name='jet', lut=None) 
+        gs1 = gridspec.GridSpec(1, 1)
+        ax = plt.subplot(gs1[0, 0])   
+        cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error, 100, cmap=cmap)
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.1)
+        cbar = plt.colorbar(cs, cax=cax)
+    elif dataset.dim == 3:
+        zz = xyz[2]
+        fig = plt.figure()
+        ax = fig.add_subplot(projection='3d')
+        cax = inset_axes(ax, width="5%", height="60%", loc="center left", 
+                         bbox_to_anchor=(1.15, 0., 1, 1), bbox_transform=ax.transAxes, borderpad=0)
+        cmap = cm.get_cmap(name='jet', lut=None) 
+        p = ax.scatter(xx[:, SNAP], yy[:, SNAP], zz[:, SNAP], c=error, cmap=cmap, linewidth=0.5)
+        cbar = fig.colorbar(p, ax=ax, cax=cax)
+        ax.set_xlabel('$x$')
+        ax.set_ylabel('$y$')
+        ax.set_zlabel('$z$')
+        ax.locator_params(axis='both', nbins=5)
     tick_locator = MaxNLocator(nbins=5)
     cbar.locator = tick_locator
     cbar.formatter.set_powerlimits((0, 0))
