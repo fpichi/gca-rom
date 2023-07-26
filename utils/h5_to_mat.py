@@ -39,7 +39,7 @@ def extract_edges_3d(tetrahedron):
                 edges.add(tuple(sorted(edge)))
     return list(edges)
 
-problem_names = ["poisson", "advection", "graetz", "diffusion", "elasticity", "poiseuille"]
+problem_names = ["poisson", "advection", "graetz", "diffusion", "elasticity", "poiseuille", "stokes_u"]
 pb = 0
 
 # These lines define and open the path of the .h5 file
