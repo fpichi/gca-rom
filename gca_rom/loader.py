@@ -1,4 +1,3 @@
-import sys
 from torch_geometric.data import Dataset
 import torch
 import scipy
