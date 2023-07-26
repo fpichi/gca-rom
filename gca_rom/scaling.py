@@ -1,25 +1,24 @@
 from sklearn import preprocessing
 import torch
-import sys
 
 
 def scaler_functions(k):
     match k:
         case 1:
-            sc_name = "minmax"
             sc_fun = preprocessing.MinMaxScaler()
+            sc_name = "minmax"
         case 2:
-            sc_name = "robust"
             sc_fun = preprocessing.RobustScaler()
+            sc_name = "robust"
         case 3:
-            sc_name = "standard"
             sc_fun = preprocessing.StandardScaler()
+            sc_name = "standard"
     return sc_fun, sc_name
 
 
-def tensor_scaling(tensor, scaling_type):
-    scaling_fun_1, _ = scaler_functions(int(sys.argv[3]))
-    scaling_fun_2, _ = scaler_functions(int(sys.argv[3]))
+def tensor_scaling(tensor, scaling_type, scaler_name):
+    scaling_fun_1, _ = scaler_functions(int(scaler_name))
+    scaling_fun_2, _ = scaler_functions(int(scaler_name))
     match scaling_type:
         case 1:
             # print("SAMPLE SCALING")
