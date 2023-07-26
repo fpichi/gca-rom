@@ -20,15 +20,15 @@ def set_device():
     return device
 
 
-def set_reproducibility(AE_Params):
+def set_reproducibility(HyperParams):
     """
     Sets the seed for reproducibility of results.
 
     Args:
-        AE_Params (class): Contains the hyperparameters of the autoencoder
+        HyperParams (class): Contains the hyperparameters of the autoencoder
     """
 
-    seed = AE_Params.seed
+    seed = HyperParams.seed
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -38,15 +38,15 @@ def set_reproducibility(AE_Params):
     torch.backends.cudnn.deterministic = True
 
 
-def set_path(AE_Params):
+def set_path(HyperParams):
     """
     Creates the directory path to store the network results.
 
     Args:
-        AE_Params (class): Contains the hyperparameters of the autoencoder
+        HyperParams (class): Contains the hyperparameters of the autoencoder
     """
 
-    path = AE_Params.net_dir
+    path = HyperParams.net_dir
     isExist = os.path.exists(path)
     if not isExist:
         os.makedirs(path, exist_ok=False)

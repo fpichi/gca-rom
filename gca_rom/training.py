@@ -2,12 +2,12 @@ import torch
 import torch.nn.functional as F
 
 
-def train(model, optimizer, device, scheduler, params, train_loader, train_trajectories, AE_Params, history):
+def train(model, optimizer, device, scheduler, params, train_loader, train_trajectories, HyperParams, history):
     """Trains the autoencoder model.
     
     This function trains the autoencoder model using mean squared error (MSE) loss and a map loss, where the map loss
     is the MSE between the estimated z (latent space) and the actual z. The final loss is the sum of the MSE loss and the
-    map loss multiplied by the weight `AE_Params.lambda_map`. The model is trained on the data from `train_loader` and 
+    map loss multiplied by the weight `HyperParams.lambda_map`. The model is trained on the data from `train_loader` and 
     the optimization process is performed using the `optimizer`. The learning rate is updated after every iteration 
     using `scheduler`. Use of mini-batching for reducing the computational cost.
 
@@ -19,7 +19,7 @@ def train(model, optimizer, device, scheduler, params, train_loader, train_traje
         params (torch.Tensor): Tensor containing the parameters of the model.
         train_loader (torch.utils.data.DataLoader): The data loader to provide the training data.
         train_trajectories (int): The number of training trajectories.
-        AE_Params (dict): The dictionary containing the hyperparameters for the autoencoder model.
+        HyperParams (dict): The dictionary containing the hyperparameters for the autoencoder model.
         history (dict): The dictionary to store the loss history.
         
     Returns:
@@ -37,7 +37,7 @@ def train(model, optimizer, device, scheduler, params, train_loader, train_traje
         out, z, z_estimation = model(data, params[train_trajectories, :])
         loss_train_mse = F.mse_loss(out, data.x, reduction='mean')
         loss_train_map = F.mse_loss(z_estimation, z, reduction='mean')
-        loss_train = loss_train_mse + AE_Params.lambda_map * loss_train_map
+        loss_train = loss_train_mse + HyperParams.lambda_map * loss_train_map
         loss_train.backward()
         optimizer.step()
         sum_loss += loss_train.item()
@@ -55,7 +55,7 @@ def train(model, optimizer, device, scheduler, params, train_loader, train_traje
     return total_loss_train
 
 
-def val(model, device, params, test_loader, test_trajectories, AE_Params, history_test):
+def val(model, device, params, test_loader, test_trajectories, HyperParams, history_test):
     """
     Evaluate the performance of a model on a test set.
 
@@ -67,7 +67,7 @@ def val(model, device, params, test_loader, test_trajectories, AE_Params, histor
         params (torch.Tensor): Tensor containing the parameters of the model.
         test_loader (torch.utils.data.DataLoader): The test data to use for evaluation.
         test_trajectories (int): The index of the test trajectory.
-        AE_Params (object): Object containing hyperparameters for the model.
+        HyperParams (object): Object containing hyperparameters for the model.
         history_test (dict): Dictionary to store the evaluation results.
 
     Returns:
@@ -85,7 +85,7 @@ def val(model, device, params, test_loader, test_trajectories, AE_Params, histor
             out, z, z_estimation = model(data, params[test_trajectories, :])
             loss_test_mse = F.mse_loss(out, data.x, reduction='mean')
             loss_test_map = F.mse_loss(z_estimation, z, reduction='mean')
-            loss_test = loss_test_mse +  AE_Params.lambda_map * loss_test_map
+            loss_test = loss_test_mse +  HyperParams.lambda_map * loss_test_map
             sum_loss += loss_test.item()
             sum_loss_1 += loss_test_mse.item()
             sum_loss_2 += loss_test_map.item()

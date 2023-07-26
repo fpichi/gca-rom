@@ -4,7 +4,7 @@ from gca_rom import gca, scaling
 
 
 
-class AE_Params:
+class HyperParams:
     """Class that holds the hyperparameters for the autoencoder model.
 
     Args:
@@ -81,10 +81,10 @@ class Net(torch.nn.Module):
         An encoder module from the gca module.
     decoder : gca.Decoder
         A decoder module from the gca module.
-    act_map : AE_Params.act
-        The activation map specified in the AE_Params.
-    layer_vec : AE_Params.layer_vec
-        The layer vector specified in the AE_Params. Shape of the layers for the parameter space mapping. 
+    act_map : HyperParams.act
+        The activation map specified in the HyperParams.
+    layer_vec : HyperParams.layer_vec
+        The layer vector specified in the HyperParams. Shape of the layers for the parameter space mapping. 
     steps : int
         Number of layers for the parameter mapping MLP.
     maptovec : nn.ModuleList
@@ -106,13 +106,13 @@ class Net(torch.nn.Module):
         Returns the decoded output, encoded representation, and estimated encoded representation.
     """
 
-    def __init__(self, AE_Params):
+    def __init__(self, HyperParams):
         super().__init__()
-        self.encoder = gca.Encoder(AE_Params.hidden_channels, AE_Params.bottleneck_dim, AE_Params.num_nodes, ffn=AE_Params.ffn, skip=AE_Params.skip)
-        self.decoder = gca.Decoder(AE_Params.hidden_channels, AE_Params.bottleneck_dim, AE_Params.num_nodes, ffn=AE_Params.ffn, skip=AE_Params.skip)
+        self.encoder = gca.Encoder(HyperParams.hidden_channels, HyperParams.bottleneck_dim, HyperParams.num_nodes, ffn=HyperParams.ffn, skip=HyperParams.skip)
+        self.decoder = gca.Decoder(HyperParams.hidden_channels, HyperParams.bottleneck_dim, HyperParams.num_nodes, ffn=HyperParams.ffn, skip=HyperParams.skip)
 
-        self.act_map = AE_Params.act
-        self.layer_vec = AE_Params.layer_vec
+        self.act_map = HyperParams.act
+        self.layer_vec = HyperParams.layer_vec
         self.steps = len(self.layer_vec) - 1
 
         self.maptovec = nn.ModuleList()

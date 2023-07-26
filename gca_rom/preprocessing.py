@@ -5,13 +5,13 @@ from torch_geometric.loader import DataLoader
 from gca_rom import scaling
 
 
-def graphs_dataset(dataset, AE_Params):
+def graphs_dataset(dataset, HyperParams):
     """
     graphs_dataset: function to process and scale the input dataset for graph autoencoder model.
 
     Inputs:
     dataset: an object containing the dataset to be processed.
-    AE_Params: an object containing the hyperparameters of the graph autoencoder model.
+    HyperParams: an object containing the hyperparameters of the graph autoencoder model.
 
     Outputs:
     dataset_graph: an object containing the processed and scaled dataset.
@@ -44,7 +44,7 @@ def graphs_dataset(dataset, AE_Params):
     print("Number of nodes processed: ", num_nodes)
     print("Number of graphs processed: ", num_graphs)
     total_sims = int(num_graphs)
-    rate = AE_Params.rate/100
+    rate = HyperParams.rate/100
     train_sims = int(rate * total_sims)
     test_sims = total_sims - train_sims
     main_loop = np.arange(total_sims).tolist()
@@ -58,9 +58,9 @@ def graphs_dataset(dataset, AE_Params):
     ## FEATURE SCALING
     var_test = dataset.U[:, test_snapshots]
 
-    scaling_type = AE_Params.scaling_type
-    scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type, AE_Params.scaler_number)
-    scaler_test, VAR_test = scaling.tensor_scaling(var_test, scaling_type, AE_Params.scaler_number)
+    scaling_type = HyperParams.scaling_type
+    scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type, HyperParams.scaler_number)
+    scaler_test, VAR_test = scaling.tensor_scaling(var_test, scaling_type, HyperParams.scaler_number)
 
     graphs = []
     edge_index = torch.t(dataset.E) - 1
@@ -80,7 +80,7 @@ def graphs_dataset(dataset, AE_Params):
         dataset_graph = Data(x=node_features, edge_index=edge_index, edge_attr=edge_attr, pos=pos)
         graphs.append(dataset_graph)
 
-    AE_Params.num_nodes = dataset_graph.num_nodes
+    HyperParams.num_nodes = dataset_graph.num_nodes
     train_dataset = [graphs[i] for i in train_snapshots]
     test_dataset = [graphs[i] for i in test_snapshots]
 
