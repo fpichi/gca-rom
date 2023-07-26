@@ -1,13 +1,10 @@
-import sys
 import torch
 from torch import nn
-from gca_rom import gca, scaling, pde
+from gca_rom import gca, scaling
 
 
-problem_name, variable, mu1_range, mu2_range = pde.problem(int(sys.argv[1]))
 
-
-class AE_Params():
+class AE_Params:
     """Class that holds the hyperparameters for the autoencoder model.
 
     Args:
@@ -37,24 +34,26 @@ class AE_Params():
         cross_validation (bool): Whether to perform cross-validation.
     """
 
-    def __init__(self):
-        self.scaling_type = int(sys.argv[2])
-        _, self.scaler_name = scaling.scaler_functions(int(sys.argv[3]))
-        self.skip = int(sys.argv[4])
-        self.rate = int(sys.argv[5])
+    def __init__(self, argv):
+        self.net_name = argv[0]
+        self.variable = argv[1]
+        self.scaling_type = int(argv[2])
+        self.scaler_number = int(argv[3])
+        _, self.scaler_name = scaling.scaler_functions(self.scaler_number)
+        self.skip = int(argv[4])
+        self.rate = int(argv[5])
         self.sparse_method = 'L1_mean'
-        self.ffn = int(sys.argv[6])
-        self.nodes = int(sys.argv[7])
-        self.bottleneck_dim = int(sys.argv[8])
-        self.lambda_map = float(sys.argv[9])
-        self.in_channels = int(sys.argv[10])
+        self.ffn = int(argv[6])
+        self.nodes = int(argv[7])
+        self.bottleneck_dim = int(argv[8])
+        self.lambda_map = float(argv[9])
+        self.in_channels = int(argv[10])
         self.seed = 10
         self.tolerance = 1e-6
         self.learning_rate = 0.001
         self.hidden_channels = [1]*self.in_channels
         self.act = torch.tanh
-        self.layer_vec=[2, self.nodes, self.nodes, self.nodes, self.nodes, self.bottleneck_dim]
-        self.net_name = problem_name
+        self.layer_vec=[argv[11], self.nodes, self.nodes, self.nodes, self.nodes, self.bottleneck_dim]
         self.net_run = '_' + self.scaler_name
         self.weight_decay = 0.00001
         self.max_epochs = 5000
@@ -62,13 +61,12 @@ class AE_Params():
         self.gamma = 0.0001
         self.num_nodes = 0
 
-        self.net_dir = './' + problem_name + '/' + self.net_run+ '/' + variable + '_' + self.net_name + '_lmap' + str(self.lambda_map) + '_btt' + str(self.bottleneck_dim) \
+        self.net_dir = './' + self.net_name + '/' + self.net_run + '/' + self.variable + '_' + self.net_name + '_lmap' + str(self.lambda_map) + '_btt' + str(self.bottleneck_dim) \
                             + '_seed' + str(self.seed) + '_lv' + str(len(self.layer_vec)-2) + '_hc' + str(len(self.hidden_channels)) + '_nd' + str(self.nodes) \
                             + '_ffn' + str(self.ffn) + '_skip' + str(self.skip) + '_lr' + str(self.learning_rate) + '_sc' + str(self.scaling_type) + '_rate' + str(self.rate) + '/'
         self.cross_validation = True
 
 
-AE_Params = AE_Params()
 
 class Net(torch.nn.Module):
     """
@@ -108,7 +106,7 @@ class Net(torch.nn.Module):
         Returns the decoded output, encoded representation, and estimated encoded representation.
     """
 
-    def __init__(self):
+    def __init__(self, AE_Params):
         super().__init__()
         self.encoder = gca.Encoder(AE_Params.hidden_channels, AE_Params.bottleneck_dim, AE_Params.num_nodes, ffn=AE_Params.ffn, skip=AE_Params.skip)
         self.decoder = gca.Decoder(AE_Params.hidden_channels, AE_Params.bottleneck_dim, AE_Params.num_nodes, ffn=AE_Params.ffn, skip=AE_Params.skip)
@@ -121,19 +119,19 @@ class Net(torch.nn.Module):
         for k in range(self.steps):
             self.maptovec.append(nn.Linear(self.layer_vec[k], self.layer_vec[k+1]))
 
-    def solo_encoder(self,data):
+    def solo_encoder(self, data):
         x = self.encoder(data)
         return x
 
-    def solo_decoder(self,x, data):
+    def solo_decoder(self, x, data):
         x = self.decoder(x, data)
         return x
 
     def mapping(self, x):
         idx = 0
         for layer in self.maptovec:
-            if(idx==self.steps): x = layer(x)
-            else: x =self.act_map(layer(x))
+            if (idx==self.steps): x = layer(x)
+            else: x = self.act_map(layer(x))
             idx += 1
         return x
 
