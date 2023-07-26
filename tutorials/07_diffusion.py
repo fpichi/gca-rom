@@ -41,8 +41,6 @@ dataset_graph, graph_loader, train_loader, test_loader, \
 
 xx = xyz[0]
 yy = xyz[1]
-if dataset.dim == 3:
-    zz = xyz[2]
 
 params = torch.tensor(np.array(list(product(*mu_space))))
 params = params.to(device)
