@@ -59,8 +59,8 @@ def graphs_dataset(dataset, AE_Params):
     var_test = dataset.U[:, test_snapshots]
 
     scaling_type = AE_Params.scaling_type
-    scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type)
-    scaler_test, VAR_test = scaling.tensor_scaling(var_test, scaling_type)
+    scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type, AE_Params.scaler_number)
+    scaler_test, VAR_test = scaling.tensor_scaling(var_test, scaling_type, AE_Params.scaler_number)
 
     graphs = []
     edge_index = torch.t(dataset.E) - 1
