@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from gca_rom import scaling
+from collections import defaultdict
 import matplotlib.gridspec as gridspec
 import matplotlib.cm as cm
 from matplotlib import ticker
@@ -59,7 +60,7 @@ def plot_latent(AE_Params, latents, latents_estimation):
     plt.savefig(AE_Params.net_dir+'box_plot_latents'+AE_Params.net_run+'.png', bbox_inches='tight', dpi=500)
     
 
-def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params, train_trajectories, vars):
+def plot_error(res, VAR_all, scaler_all, AE_Params, mu_space, params, train_trajectories, vars, p1=0, p2=-1):
     """
     This function plots the relative error between the predicted and actual results.
 
@@ -78,14 +79,31 @@ def plot_error(res, VAR_all, scaler_all, AE_Params, mu1_range, mu2_range, params
     u_hf = scaling.inverse_scaling(VAR_all, scaler_all, AE_Params.scaling_type)
     u_app = scaling.inverse_scaling(res, scaler_all, AE_Params.scaling_type)
     error = np.linalg.norm(u_app - u_hf, axis=0) / np.linalg.norm(u_hf, axis=0)
+    mu1_range = mu_space[p1]
+    mu2_range = mu_space[p2]
+    n_params = params.shape[1]
+    tr_pt_1 = params[train_trajectories, p1]
+    tr_pt_2 = params[train_trajectories, p2]
+    if n_params > 2:
+        rows, ind = np.unique(params[:, [p1, p2]], axis=0, return_inverse=True)
+        indices_dict = defaultdict(list)
+        [indices_dict[tuple(rows[i])].append(idx) for idx, i in enumerate(ind)]
+        error = np.array([np.mean(error[indices]) for indices in indices_dict.values()])
+        tr_pt = [i for i in indices_dict if any(idx in train_trajectories for idx in indices_dict[i])]
+        tr_pt_1 = [t[0] for t in tr_pt]
+        tr_pt_2 = [t[1] for t in tr_pt]
     X1, X2 = np.meshgrid(mu1_range, mu2_range, indexing='ij')
     output = np.reshape(error, (len(mu1_range), len(mu2_range)))
     fig = plt.figure('Relative Error '+vars)
     ax = fig.add_subplot(projection='3d')
     ax.plot_surface(X1, X2, output, cmap=cm.coolwarm, color='blue')
     ax.contour(X1, X2, output, zdir='z', offset=output.min(), cmap=cm.coolwarm)
-    ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]), ylim=tuple([mu2_range[0], mu2_range[-1]]), xlabel='$\mu_1$', ylabel='$\mu_2$', zlabel='$\\epsilon_{GCA}(\\mathbf{\mu})$')
-    ax.plot(params[train_trajectories,0], params[train_trajectories,1], output.min()*np.ones(len(params[train_trajectories,1])), '*r')
+    ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]),
+           ylim=tuple([mu2_range[0], mu2_range[-1]]),
+           xlabel=f'$\mu_{str((p1%n_params)+1)}$',
+           ylabel=f'$\mu_{str((p2%n_params)+1)}$',
+           zlabel='$\\epsilon_{GCA}(\\mathbf{\mu})$')
+    ax.plot(tr_pt_1, tr_pt_2, output.min()*np.ones(len(tr_pt_1)), '*r')
     plt.ticklabel_format(axis='z', style='sci', scilimits=(0, 0))
     ax.set_title('Relative Error '+vars)
     ax.zaxis.offsetText.set_visible(False)
