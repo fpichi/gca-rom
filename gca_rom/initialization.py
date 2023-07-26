@@ -14,7 +14,7 @@ def set_device():
     """
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print("Device used = ", device)
+    print("Device used: ", device)
     torch.set_default_dtype(torch.float64)
     warnings.filterwarnings("ignore")
     return device
