@@ -65,9 +65,9 @@ If you use GCA-ROM for academic research, you are encouraged to cite the paper u
 
 in collaboration with the MCSS group at EPFL of Prof. Jan S. Hesthaven
 
-<!-- with contributions from:
+with contributions from:
 
-- Name Surname (name.surname@institute.xy) -->
+- Francesco Pettenon (francesco.pettenon@epfl.ch)
 
 <a href="https://github.com/fpichi/gca-rom/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=fpichi/gca-rom" />
