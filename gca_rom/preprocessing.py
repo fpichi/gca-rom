@@ -92,5 +92,6 @@ def graphs_dataset(dataset, HyperParams):
     test_loader = DataLoader(test_dataset, batch_size=test_sims, shuffle=False)
     val_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
     
-    return dataset_graph, loader, train_loader, test_loader, \
-            val_loader, scaler_all, scaler_test, xyz, var, VAR_all, VAR_test, train_snapshots, test_snapshots
+    return loader, train_loader, test_loader, \
+            val_loader, scaler_all, scaler_test, xyz, VAR_all, VAR_test, \
+                train_snapshots, test_snapshots

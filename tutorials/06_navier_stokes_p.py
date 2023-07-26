@@ -35,8 +35,8 @@ initialization.set_path(HyperParams)
 dataset_dir = '../dataset/'+problem_name+'_unstructured.mat'
 dataset = loader.LoadDataset(dataset_dir, variable)
 
-dataset_graph, graph_loader, train_loader, test_loader, \
-    val_loader, scaler_all, scaler_test, xyz, var, VAR_all, VAR_test, \
+graph_loader, train_loader, test_loader, \
+    val_loader, scaler_all, scaler_test, xyz, VAR_all, VAR_test, \
         train_trajectories, test_trajectories = preprocessing.graphs_dataset(dataset, HyperParams)
 
 xx = xyz[0]
