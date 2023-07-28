@@ -12,18 +12,6 @@ print("\nProblem: ", problem_name)
 print("Variable: ", variable)
 print("Parameters: ", n_param)
 
-# st = 4
-# sf = 3
-# sk = 1
-# train_rate = 30
-# ffc_nodes = 200
-# latent_nodes = 50
-# btt_nodes = 25
-# lambda_map = 1e1
-# hidden_channels = 2
-# argv = [problem_name, variable, st, sf, sk, train_rate, ffc_nodes,
-#         latent_nodes, btt_nodes, lambda_map, hidden_channels, n_param]
-
 argv = gui.hyperparameters_selection(problem_name, variable, n_param)
 HyperParams = network.HyperParams(argv)
 

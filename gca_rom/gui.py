@@ -37,7 +37,7 @@ def hyperparameters_selection(name, var, n):
         elif name == "graetz":
             preset = [3, 2, 2, 2, 1, 3, 3, 1]
         elif name == "navier_stokes":
-            preset = [3, 2, 2, 2, 3, 3, 2, 2]
+            preset = [3, 2, 0, 2, 3, 3, 2, 2]
         elif name == "diffusion":
             preset = [3, 2, 2, 2, 1, 1, 3, 2]
         elif name == "poiseuille":
