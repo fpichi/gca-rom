@@ -29,6 +29,7 @@ class LoadDataset(Dataset):
     """
 
     def __init__(self, root_dir, variable):
+        # Load your mat file here using scipy.io.loadmat
         self.data_mat = scipy.io.loadmat(root_dir)
         self.U = torch.tensor(self.data_mat[variable])
         self.xx = torch.tensor(self.data_mat['xx'])
@@ -41,3 +42,9 @@ class LoadDataset(Dataset):
             KeyError
         self.T = torch.tensor(self.data_mat['T'].astype(int))
         self.E = torch.tensor(self.data_mat['E'].astype(int))
+
+    def len(self):
+        pass
+    
+    def get(self):
+        pass
