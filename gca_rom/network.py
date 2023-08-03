@@ -3,7 +3,6 @@ from torch import nn
 from gca_rom import gca, scaling
 
 
-
 class HyperParams:
     """Class that holds the hyperparameters for the autoencoder model.
 
@@ -56,7 +55,7 @@ class HyperParams:
         self.layer_vec=[argv[11], self.nodes, self.nodes, self.nodes, self.nodes, self.bottleneck_dim]
         self.net_run = '_' + self.scaler_name
         self.weight_decay = 0.00001
-        self.max_epochs = 5000
+        self.max_epochs = argv[12]
         self.miles = []
         self.gamma = 0.0001
         self.num_nodes = 0
