@@ -28,9 +28,6 @@ graph_loader, train_loader, test_loader, \
     val_loader, scaler_all, scaler_test, xyz, VAR_all, VAR_test, \
         train_trajectories, test_trajectories = preprocessing.graphs_dataset(dataset, HyperParams)
 
-xx = xyz[0]
-yy = xyz[1]
-
 params = torch.tensor(np.array(list(product(*mu_space))))
 params = params.to(device)
 
@@ -39,37 +36,13 @@ model = network.Net(HyperParams)
 model = model.to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=HyperParams.learning_rate, weight_decay=HyperParams.weight_decay)
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=HyperParams.miles, gamma=HyperParams.gamma)
-history = dict(train=[], l1=[], l2=[])
-history_test = dict(test=[], l1=[], l2=[])
-min_test_loss = np.Inf
 
-# Train or load a pre-trained network
 try:
     model.load_state_dict(torch.load(HyperParams.net_dir+HyperParams.net_name+HyperParams.net_run+'.pt', map_location=torch.device('cpu')))
     print('Loading saved network')
-
 except FileNotFoundError:
-    print('Training net')
-    for epoch in range(HyperParams.max_epochs):
-        train_rmse = training.train(model, optimizer, device, scheduler, params, train_loader, train_trajectories, HyperParams, history)
-        if HyperParams.cross_validation:
-            test_rmse = training.val(model, device, params, test_loader, test_trajectories, HyperParams, history_test)
-            print("Epoch[{}/{}, train_mse loss:{}, test_mse loss:{}".format(epoch + 1, HyperParams.max_epochs, history['train'][-1], history_test['test'][-1]))
-        else:
-            test_rmse = train_rmse
-            print("Epoch[{}/{}, train_mse loss:{}".format(epoch + 1, HyperParams.max_epochs, history['train'][-1]))
-        if test_rmse < min_test_loss:
-            min_test_loss = test_rmse
-            best_epoch = epoch
-            torch.save(model.state_dict(), HyperParams.net_dir+HyperParams.net_name+HyperParams.net_run+'.pt')
-        if HyperParams.tolerance >= train_rmse:
-            print('Early stopping!')
-            break
-        np.save(HyperParams.net_dir+'history'+HyperParams.net_run+'.npy', history)
-        np.save(HyperParams.net_dir+'history_test'+HyperParams.net_run+'.npy', history_test)
-
-    print("\nLoading best network for epoch: ", best_epoch)
-    model.load_state_dict(torch.load(HyperParams.net_dir+HyperParams.net_name+HyperParams.net_run+'.pt', map_location=torch.device('cpu')))
+    print('Training network')
+    training.train(model, optimizer, device, scheduler, params, train_loader, test_loader, train_trajectories, test_trajectories, HyperParams)
 
 # Evaluate the model
 model.to("cpu")
