@@ -83,7 +83,7 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
                 test_history['l1'].append(test_rmse_1)
                 test_history['l2'].append(test_rmse_2)
             # print("Epoch[{}/{}, train_mse loss:{}, test_mse loss:{}".format(epoch + 1, HyperParams.max_epochs, train_history['train'][-1], test_history['test'][-1]))
-            loop.set_postfix({"Loss(training)": train_history['train'][-1]}, {"Loss(validation)": test_history['test'][-1]})
+            loop.set_postfix({"Loss(training)": train_history['train'][-1], "Loss(validation)": test_history['test'][-1]})
         else:
             test_rmse = train_rmse
             # print("Epoch[{}/{}, train_mse loss:{}".format(epoch + 1, HyperParams.max_epochs, train_history['train'][-1]))
