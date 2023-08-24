@@ -1,10 +1,14 @@
-# GCA-ROM
+# GCA-ROM 
 
 GCA-ROM is a library which implements graph convolutional autoencoder architecture as a nonlinear model order reduction strategy.
 
 ## Installation
 
 GCA-ROM requires `pytorch`, `pyg`, `matplotlib`, `scipy` and `h5py`. They can be easily installed via `pip` or `conda`.
+
+![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg) 
+
+**In the notebook folder, one can find the `*.ipynb` files corresponding to the tutorials to run the models in Google Colab without installing the package.**
 
 #### **MacOS**
 Latest version of `pyg` is currently not available on `conda`. The required dependencies, exported in *utils/gca_rom.yml*, can be automatically installed in a new environment via  
