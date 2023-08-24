@@ -128,7 +128,8 @@ def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params):
     params: array of shape (num_features,), containing the parameters associated with each snapshot.
     The function generates a plot of the field solution and saves it to disk using the filepath specified in HyperParams.net_dir.
     """
-    
+
+    fig = plt.figure()    
     Z_net = scaling.inverse_scaling(results, scaler_all, HyperParams.scaling_type)
     z_net = Z_net[:, SNAP]
     xx = xyz[0]
@@ -144,7 +145,6 @@ def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params):
         cbar = plt.colorbar(cs, cax=cax)
     elif dataset.dim == 3:
         zz = xyz[2]
-        fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
         cax = inset_axes(ax, width="5%", height="60%", loc="center left", 
                          bbox_to_anchor=(1.15, 0., 1, 1), bbox_transform=ax.transAxes, borderpad=0)
@@ -164,6 +164,7 @@ def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params):
     ax.set_title('Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
     plt.savefig(HyperParams.net_dir+'field_solution_'+str(SNAP)+''+HyperParams.net_run+'.png', bbox_inches='tight', dpi=500)
 
+
 def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, xyz, params):
     """
     This function plots a contour map of the error field of a given solution of a scalar field.
@@ -181,6 +182,7 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, 
     params: np.array, model parameters
     """
 
+    fig = plt.figure()
     Z = scaling.inverse_scaling(VAR_all, scaler_all, HyperParams.scaling_type)
     Z_net = scaling.inverse_scaling(results, scaler_all, HyperParams.scaling_type)
     z = Z[:, SNAP]
@@ -199,7 +201,6 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, 
         cbar = plt.colorbar(cs, cax=cax)
     elif dataset.dim == 3:
         zz = xyz[2]
-        fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
         cax = inset_axes(ax, width="5%", height="60%", loc="center left", 
                          bbox_to_anchor=(1.15, 0., 1, 1), bbox_transform=ax.transAxes, borderpad=0)
