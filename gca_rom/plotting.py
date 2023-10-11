@@ -52,11 +52,18 @@ def plot_latent(HyperParams, latents, latents_estimation):
     for i1 in range(HyperParams.bottleneck_dim):
         plt.plot(latents[:,i1].detach(), '--')
         plt.plot(latents_estimation[:,i1].detach(),'-')
-    plt.savefig(HyperParams.net_dir+'latents'+HyperParams.net_run+'.png', bbox_inches='tight')
+    plt.title('Evolution in the latent space')
+    plt.ylabel('$u_N(\mu)$')
+    plt.xlabel('Snaphots')
+    plt.legend(['Autoencoder', 'Map'])
+    plt.savefig(HyperParams.net_dir+'latents'+HyperParams.net_run+'.png', bbox_inches='tight', dpi=500)
     
     green_diamond = dict(markerfacecolor='g', marker='D')
     _, ax = plt.subplots()
     ax.boxplot(latents_estimation.detach().numpy(), flierprops=green_diamond)
+    plt.title('Variance in the latent space')
+    plt.ylabel('$u_N(\mu)$')
+    plt.xlabel('Bottleneck')
     plt.savefig(HyperParams.net_dir+'box_plot_latents'+HyperParams.net_run+'.png', bbox_inches='tight', dpi=500)
     
 
