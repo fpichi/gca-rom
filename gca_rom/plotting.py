@@ -32,7 +32,7 @@ def plot_loss(HyperParams):
     ax.semilogy(history_test['l1'], '--')
     ax.semilogy(history_test['l2'], '--')
     plt.ylabel('Loss')
-    plt.ylabel('Epochs')
+    plt.xlabel('Epochs')
     plt.title('Loss over training epochs')
     plt.legend(['loss_mse', 'loss_map', 'loss_test_mse', 'loss_test_map'])
     plt.savefig(HyperParams.net_dir+'history_losses'+HyperParams.net_run+'.png', bbox_inches='tight', dpi=500)
