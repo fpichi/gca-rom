@@ -147,7 +147,7 @@ def plot_error_2d(res, VAR_all, scaler_all, HyperParams, mu_space, params, train
     tr_pt_2 = params[train_trajectories, p2]
     X1, X2 = np.meshgrid(mu1_range, mu2_range, indexing='ij')
     output = np.reshape(error, (len(mu1_range), len(mu2_range)))
-    fig = plt.figure('Relative Error 2D'+vars)
+    fig = plt.figure('Relative Error 2D '+vars)
     ax = fig.add_subplot()
     fmt = ticker.ScalarFormatter(useMathText=True)
     fmt.set_powerlimits((0, 0))
@@ -159,7 +159,7 @@ def plot_error_2d(res, VAR_all, scaler_all, HyperParams, mu_space, params, train
            xlabel=f'$\mu_{str((p1%n_params)+1)}$',
            ylabel=f'$\mu_{str((p2%n_params)+1)}$')
     ax.plot(tr_pt_1, tr_pt_2,'*r')
-    ax.set_title('Relative Error 2D'+vars)
+    ax.set_title('Relative Error 2D '+vars)
     plt.tight_layout()
     plt.savefig(HyperParams.net_dir+'relative_error_2d_'+vars+HyperParams.net_run+'.png', transparent=True, dpi=500)
     plt.show()
