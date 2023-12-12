@@ -111,6 +111,7 @@ def plot_error(res, VAR_all, scaler_all, HyperParams, mu_space, params, train_tr
            ylabel=f'$\mu_{str((p2%n_params)+1)}$',
            zlabel='$\\epsilon_{GCA}(\\mathbf{\mu})$')
     ax.plot(tr_pt_1, tr_pt_2, output.min()*np.ones(len(tr_pt_1)), '*r')
+    ax.set_title('Relative Error '+vars)
     ax.zaxis.offsetText.set_visible(False)
     exponent_axis = np.floor(np.log10(max(ax.get_zticks()))).astype(int)
     ax.ticklabel_format(axis='z', style='sci', scilimits=(0, 0))
@@ -158,6 +159,7 @@ def plot_error_2d(res, VAR_all, scaler_all, HyperParams, mu_space, params, train
            xlabel=f'$\mu_{str((p1%n_params)+1)}$',
            ylabel=f'$\mu_{str((p2%n_params)+1)}$')
     ax.plot(tr_pt_1, tr_pt_2,'*r')
+    ax.set_title('Relative Error 2D'+vars)
     plt.tight_layout()
     plt.savefig(HyperParams.net_dir+'relative_error_2d_'+vars+HyperParams.net_run+'.png', transparent=True, dpi=500)
     plt.show()
