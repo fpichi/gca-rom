@@ -96,22 +96,21 @@ Below are some snaphots of the approximated solutions for the available becnhamr
 
 ## Cite GCA-ROM
 
-[1] Pichi, F., Moya, B. and Hesthaven, J.S. (2023) ‘A graph convolutional autoencoder approach to model order reduction for parametrized PDEs’. Available at: [arXiv](https://arxiv.org/abs/2305.08573).
+[1] Pichi, F., Moya, B. and Hesthaven, J.S. (2023) ‘A graph convolutional autoencoder approach to model order reduction for parametrized PDEs’. Available at: [arXiv](https://arxiv.org/abs/2305.08573), [Journal of Computational Physics](https://www.sciencedirect.com/science/article/pii/S0021999124000111?via%3Dihub)
 
 If you use GCA-ROM for academic research, you are encouraged to cite the paper using:
 
 
 ```tex
-@misc{PichiGraphConvolutionalAutoencoder2023,
+@article{PichiGraphConvolutionalAutoencoder2024,
   title = {A Graph Convolutional Autoencoder Approach to Model Order Reduction for Parametrized {{PDEs}}},
   author = {Pichi, Federico and Moya, Beatriz and Hesthaven, Jan S.},
-  year = {2023},
-  number = {arXiv:2305.08573},
-  eprint = {2305.08573},
-  primaryclass = {cs, math},
-  publisher = {{arXiv}},
-  doi = {10.48550/arXiv.2305.08573},
-  archiveprefix = {arxiv}
+  year = {2024},
+  journal = {Journal of Computational Physics},
+  volume = {501},
+  pages = {112762},
+  doi = {10.1016/j.jcp.2024.112762},
+  urldate = {2024-01-18}
 }
 ```
 
@@ -123,8 +122,10 @@ in collaboration with the MCSS group at EPFL of Prof. Jan S. Hesthaven.
 
 With contributions from:
 
+- Oisín Morrison (oisinmmm@gmail.com)
 - Francesco Pettenon (francesco.pettenon@epfl.ch)
 - Francesco Sala (francesco.sala@epfl.ch)
+- Leonardo Trentini (leonardo.trentini@epfl.ch)
 
 <a href="https://github.com/fpichi/gca-rom/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=fpichi/gca-rom" />
