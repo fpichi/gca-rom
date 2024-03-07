@@ -28,20 +28,25 @@ class LoadDataset(Dataset):
         Initializes the LoadDataset object by loading the data from the .mat file at the root_dir location and converting the specified variable to a tensor representation.
     """
 
-    def __init__(self, root_dir, variable):
+    def __init__(self, root_dir, variable, dim_pde, n_comp):
         # Load your mat file here using scipy.io.loadmat
         self.data_mat = scipy.io.loadmat(root_dir)
-        self.U = torch.tensor(self.data_mat[variable])
+        self.dim = dim_pde
+        self.n_comp = n_comp
         self.xx = torch.tensor(self.data_mat['xx'])
         self.yy = torch.tensor(self.data_mat['yy'])
-        self.dim = 3
-        try:
-            self.zz = torch.tensor(self.data_mat['zz'])
-        except:
-            self.dim = 2
-            KeyError
         self.T = torch.tensor(self.data_mat['T'].astype(int))
         self.E = torch.tensor(self.data_mat['E'].astype(int))
+
+        if self.n_comp == 1:
+            self.U = torch.tensor(self.data_mat[variable])
+        elif self.n_comp == 2:
+            self.VX = torch.tensor(self.data_mat['VX'])
+            self.VY = torch.tensor(self.data_mat['VY'])
+
+        if self.dim == 3:
+            self.zz = torch.tensor(self.data_mat['zz'])
+
 
     def len(self):
         pass
