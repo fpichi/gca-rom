@@ -30,6 +30,8 @@ def problem(argument):
             mu2 = np.linspace(0.01, 10., 10)
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 2:
             problem_name = "advection"
             variable = 'U'
@@ -37,6 +39,8 @@ def problem(argument):
             mu2 = np.linspace(-1.0, 1.0, 10)
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 3:
             problem_name = "graetz"
             variable = 'U'
@@ -44,6 +48,8 @@ def problem(argument):
             mu2 = np.linspace(0.01, 0.1, 20)
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 4:
             problem_name = "navier_stokes"
             variable = 'VX'
@@ -51,6 +57,8 @@ def problem(argument):
             mu2 = np.linspace(2., 0.5, 151)[::5]
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 5:
             problem_name = "navier_stokes"
             variable = 'VY'
@@ -58,6 +66,8 @@ def problem(argument):
             mu2 = np.linspace(2., 0.5, 151)[::5]
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 6:
             problem_name = "navier_stokes"
             variable = 'P'
@@ -65,6 +75,8 @@ def problem(argument):
             mu2 = np.linspace(2., 0.5, 151)[::5]
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 7:
             problem_name = "diffusion"
             variable = 'U'
@@ -72,6 +84,8 @@ def problem(argument):
             mu2 = np.linspace(0., 1., 20)
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 8:
             problem_name = "poiseuille"
             variable = 'U'
@@ -79,6 +93,8 @@ def problem(argument):
             mu2 = np.linspace(0., 1., 50)
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 2
+            n_comp = 1
         case 9:
             problem_name = "elasticity"
             variable = 'U'
@@ -86,6 +102,8 @@ def problem(argument):
             mu2 = np.linspace(2., 200., 11)
             mu_space = [mu1, mu2]
             n_param = 2
+            dim_pde = 3
+            n_comp = 1
         case 10:
             problem_name = "stokes_u"
             variable = 'U'
@@ -95,4 +113,36 @@ def problem(argument):
             for i in range(len(mu_range)):
                 mu_space.append(np.linspace(mu_range[i][0], mu_range[i][1], n_pts[i]))
             n_param = 7
-    return problem_name, variable, mu_space, n_param
+            dim_pde = 2
+            n_comp = 1
+        case 11:
+            problem_name = "holed_advection"
+            variable = 'U'
+            mu1 = np.linspace(-0.5, 0.5, 5)
+            mu2 = np.linspace(-0.5, 0.5, 5)
+            mu3 = np.linspace(0., 1., 101)
+            mu_space = [mu1, mu2, mu3]
+            n_param = 3
+            dim_pde = 2
+            n_comp = 1
+        case 12:
+            problem_name = "lid_driven_cavity"
+            variable = 'VX_VY'
+            mu1 = np.linspace(-3., 3., 5)
+            mu2 = np.linspace(-3., 3., 5)
+            mu3 = np.linspace(0., 2., 201)
+            mu_space = [mu1, mu2, mu3]
+            n_param = 3
+            dim_pde = 2
+            n_comp = 2
+        case 13:
+            problem_name = "moving_hole_advection"
+            variable = 'U'
+            mu1 = np.linspace(0.1, 0.6, 5)
+            mu2 = np.linspace(0.1, 0.6, 5)
+            mu3 = np.linspace(0., 2., 101)
+            mu_space = [mu1, mu2, mu3]
+            n_param = 3
+            dim_pde = 2
+            n_comp = 1
+    return problem_name, variable, mu_space, n_param, dim_pde, n_comp
