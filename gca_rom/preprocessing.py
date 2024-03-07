@@ -35,7 +35,12 @@ def graphs_dataset(dataset, HyperParams):
     if dataset.dim == 3:
        zz = dataset.zz
        xyz.append(zz)
-    var = dataset.U
+    if HyperParams.comp == 1:
+        var = dataset.U
+    else:
+        var1 = dataset.VX
+        var2 = dataset.VY
+        var = torch.stack((dataset.VX, dataset.VY), dim=2)
 
     # PROCESSING DATASET
     num_nodes = var.shape[0]
@@ -55,12 +60,24 @@ def graphs_dataset(dataset, HyperParams):
     test_snapshots = main_loop[train_sims:total_sims]
     test_snapshots.sort()
 
-    ## FEATURE SCALING
-    var_test = dataset.U[:, test_snapshots]
-
     scaling_type = HyperParams.scaling_type
-    scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type, HyperParams.scaler_number)
-    scaler_test, VAR_test = scaling.tensor_scaling(var_test, scaling_type, HyperParams.scaler_number)
+    ## FEATURE SCALING
+    if HyperParams.comp == 1:
+        var_test = dataset.U[:, test_snapshots]
+        scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type, HyperParams.scaler_number)
+        scaler_test, VAR_test = scaling.tensor_scaling(var_test, scaling_type, HyperParams.scaler_number)
+    else:
+        var1_test = var1[:, test_snapshots]
+        var2_test = var2[:, test_snapshots]
+        scaler_var1_all, VAR1_all = scaling.tensor_scaling(var1, scaling_type, HyperParams.scaler_number)
+        scaler_var1_test, VAR1_test = scaling.tensor_scaling(var1_test, scaling_type, HyperParams.scaler_number)
+        scaler_var2_all, VAR2_all = scaling.tensor_scaling(var2, scaling_type, HyperParams.scaler_number)
+        scaler_var2_test, VAR2_test = scaling.tensor_scaling(var2_test, scaling_type, HyperParams.scaler_number)
+        VAR_all = torch.cat((VAR1_all, VAR2_all), dim=2)
+        VAR_test = torch.cat((VAR1_test, VAR2_test), dim=2)
+        scaler_all = [scaler_var1_all, scaler_var2_all]
+        scaler_test = [scaler_var1_test, scaler_var2_test]
+
 
     graphs = []
     edge_index = torch.t(dataset.E) - 1
@@ -76,7 +93,10 @@ def graphs_dataset(dataset, HyperParams):
             edge_attr = torch.sqrt(torch.pow(edge_diff[:, 0], 2) + torch.pow(edge_diff[:, 1], 2))
         elif dataset.dim == 3:
             edge_attr = torch.sqrt(torch.pow(edge_diff[:, 0], 2) + torch.pow(edge_diff[:, 1], 2) + torch.pow(edge_diff[:, 2], 2))
-        node_features = VAR_all[graph, :]
+        if HyperParams.comp == 1:
+            node_features = VAR_all[graph, :]
+        else:
+            node_features = VAR_all[graph, :, :]
         dataset_graph = Data(x=node_features, edge_index=edge_index, edge_attr=edge_attr, pos=pos)
         graphs.append(dataset_graph)
 
@@ -95,3 +115,65 @@ def graphs_dataset(dataset, HyperParams):
     return loader, train_loader, test_loader, \
             val_loader, scaler_all, scaler_test, xyz, VAR_all, VAR_test, \
                 train_snapshots, test_snapshots
+
+
+def delete_initial_condition(dataset, params, mu_space, n_comp, n_snap_time):
+    params = params[params[:, -1] != 0.]
+    mu_space[-1] = np.delete(mu_space[-1], 0)
+    if n_comp == 1:
+        indices = torch.ones(dataset.U.shape[1], dtype=torch.bool)
+        indices[::n_snap_time] = 0
+        dataset.U = dataset.U[:, indices]
+    elif n_comp == 2:
+        indices = torch.ones(dataset.VX.shape[1], dtype=torch.bool)
+        indices[::n_snap_time] = 0
+        dataset.VX = dataset.VX[:, indices]
+        dataset.VY = dataset.VY[:, indices]
+    else:
+        print("Invalid dimension. Please enter 1 or 2.")
+    return dataset, params, mu_space
+
+
+def shrink_dataset(dataset, mu_space, n_sim, n_snap2keep, n_comp):
+    time = mu_space[-1]
+    n_snap = len(time)
+    idx_time = np.round(np.linspace(0, n_snap-1, n_snap2keep)).astype(int)
+    mu_space[-1] = time[idx_time]
+    n_time_step = int(n_snap/n_snap2keep)+1
+
+    if n_comp == 1:
+        new_U = []
+        new_xx = []
+        new_yy = []
+        for i in range(n_sim):
+            start = i*n_snap
+            new_U.append(dataset.U[:, start:start+n_snap:n_time_step])
+            new_xx.append(dataset.xx[:, start:start+n_snap:n_time_step])
+            new_yy.append(dataset.yy[:, start:start+n_snap:n_time_step])
+        new_U = np.concatenate(new_U, axis=1)
+        new_xx = np.concatenate(new_xx, axis=1)
+        new_yy = np.concatenate(new_yy, axis=1)
+        dataset.U = torch.tensor(new_U)
+        dataset.xx = torch.tensor(new_xx)
+        dataset.yy = torch.tensor(new_yy)
+    elif n_comp == 2:
+        new_VX = []
+        new_VY = []
+        new_xx = []
+        new_yy = []
+        for i in range(n_sim):
+            start = i*n_snap
+            new_VX.append(dataset.VX[:, start:start+n_snap:n_time_step])
+            new_VY.append(dataset.VY[:, start:start+n_snap:n_time_step])
+            new_xx.append(dataset.xx[:, start:start+n_snap:n_time_step])
+            new_yy.append(dataset.yy[:, start:start+n_snap:n_time_step])
+        new_VX = np.concatenate(new_VX, axis=1)
+        new_VY = np.concatenate(new_VY, axis=1)
+        new_xx = np.concatenate(new_xx, axis=1)
+        new_yy = np.concatenate(new_yy, axis=1)
+        dataset.VX = torch.tensor(new_VX)
+        dataset.VY = torch.tensor(new_VY)
+        dataset.xx = torch.tensor(new_xx)
+        dataset.yy = torch.tensor(new_yy)
+
+    return dataset, mu_space
