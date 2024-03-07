@@ -23,7 +23,7 @@ def evaluate(VAR, model, loader, params, HyperParams, test):
     latents_gca: np.array, latent representations obtained using the AE encoder
     """
 
-    results = torch.zeros(VAR.shape[0], VAR.shape[1], 1)
+    results = torch.zeros(VAR.shape[0], VAR.shape[1], HyperParams.comp)
     latents_map = torch.zeros(VAR.shape[0], HyperParams.bottleneck_dim)
     latents_gca = torch.zeros(VAR.shape[0], HyperParams.bottleneck_dim)
     index = 0
