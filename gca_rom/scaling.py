@@ -23,7 +23,7 @@ def tensor_scaling(tensor, scaling_type, scaler_name):
         case 1:
             # print("SAMPLE SCALING")
             scale = scaling_fun_1.fit(tensor)
-            scaled_data = torch.unsqueeze(torch.tensor(scale.transform(tensor)),0).permute(2, 1, 0)
+            scaled_data = torch.unsqueeze(torch.tensor(scale.transform(tensor)), 0).permute(2, 1, 0)
         case 2:
             # print("FEATURE SCALING")
             scale = scaling_fun_1.fit(torch.t(tensor))
