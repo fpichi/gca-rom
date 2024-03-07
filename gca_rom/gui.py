@@ -2,7 +2,7 @@ import tkinter as tk
 import numpy as np
 
 
-def hyperparameters_selection(name, var, n):
+def hyperparameters_selection(name, var, n, comp):
 
     def on_option_selected_1(*args):
         selected_option_1.set(selected_var_1.get())
@@ -49,6 +49,12 @@ def hyperparameters_selection(name, var, n):
             preset = [3, 2, 2, 2, 1, 1, 3, 2]
         elif name == "stokes_u":
             preset = [3, 2, 2, 2, 1, 3, 3, 1]
+        elif name == "holed_advection":
+            preset = [3, 2, 2, 2, 1, 3, 3, 1]
+        elif name == "lid_driven_cavity":
+            preset = [3, 2, 2, 2, 1, 3, 3, 1]
+        elif name == "moving_hole_advection":
+            preset = [3, 2, 2, 2, 1, 3, 3, 1]
         return preset
 
 
@@ -80,7 +86,7 @@ def hyperparameters_selection(name, var, n):
         selected_option_1.set(selected_var_1.get())
         dropdown_menu_1 = tk.OptionMenu(root, selected_var_1, *preset_options_1)  # Create and place the OptionMenu widget
         dropdown_menu_1.grid(row=row, column=5, columnspan=3)
-        selected_var_1.trace("w", on_option_selected_1)  # Bind the on_option_selected function to the OptionMenu widget
+        selected_var_1.trace_add("w", on_option_selected_1)  # Bind the on_option_selected function to the OptionMenu widget
 
         # BOX2
         row = 1
@@ -94,7 +100,7 @@ def hyperparameters_selection(name, var, n):
         selected_option_2.set(selected_var_2.get())
         dropdown_menu_2 = tk.OptionMenu(root, selected_var_2, *preset_options_2)  # Create and place the OptionMenu widget
         dropdown_menu_2.grid(row=row, column=5, columnspan=3)
-        selected_var_2.trace("w", on_option_selected_2)  # Bind the on_option_selected function to the OptionMenu widget
+        selected_var_2.trace_add("w", on_option_selected_2)  # Bind the on_option_selected function to the OptionMenu widget
 
         # BOLEAN BUTTON
         row = 2
@@ -254,11 +260,11 @@ def hyperparameters_selection(name, var, n):
         flag1 = int(flag1.get() == True)
         argv = [name, var, selected_ind_1, selected_ind_2, flag1,
                 selected_option_3.get(), selected_option_4.get(), selected_option_5.get(),
-                selected_option_6.get(), selected_option_7.get(), selected_option_8.get(), n, int(selected_option_9.get())]
+                selected_option_6.get(), selected_option_7.get(), selected_option_8.get(), n, int(selected_option_9.get()), comp]
 
     except tk.TclError:
         argv = [name, var, preset[0] + 1, preset[1] + 1, 1,
                 int(preset_options_3[preset[2]]), int(preset_options_4[preset[3]]), int(preset_options_5[preset[4]]),
-                int(preset_options_6[preset[5]]), float(preset_options_7[preset[6]]), int(preset_options_8[preset[7]]), n, int(preset_options_9[0])]
+                int(preset_options_6[preset[5]]), float(preset_options_7[preset[6]]), int(preset_options_8[preset[7]]), n, int(preset_options_9[0]), comp]
 
     return argv
