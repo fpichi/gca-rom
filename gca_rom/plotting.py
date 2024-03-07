@@ -165,7 +165,7 @@ def plot_error_2d(res, VAR_all, scaler_all, HyperParams, mu_space, params, train
     plt.show()
 
 
-def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params):
+def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params, comp="_U"):
     """
     Plots the field solution for a given snapshot.
 
@@ -214,10 +214,10 @@ def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params):
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
     ax.set_title('Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
-    plt.savefig(HyperParams.net_dir+'field_solution_'+str(SNAP)+''+HyperParams.net_run+'.png', bbox_inches='tight', dpi=500)
+    plt.savefig(HyperParams.net_dir+'field_solution_'+str(SNAP)+''+HyperParams.net_run+comp+'.png', bbox_inches='tight', dpi=500)
 
 
-def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, xyz, params):
+def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, comp="_U"):
     """
     This function plots a contour map of the error field of a given solution of a scalar field.
     The error is computed as the absolute difference between the true solution and the predicted solution,
@@ -270,4 +270,4 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, 
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
     ax.set_title('Error field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
-    plt.savefig(HyperParams.net_dir+'error_field_'+str(SNAP)+''+HyperParams.net_run+'.png', bbox_inches='tight', dpi=500)
+    plt.savefig(HyperParams.net_dir+'error_field_'+str(SNAP)+''+HyperParams.net_run+comp+'.png', bbox_inches='tight', dpi=500)
