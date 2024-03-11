@@ -145,6 +145,14 @@ def plot_error_2d(res, VAR_all, scaler_all, HyperParams, mu_space, params, train
     n_params = params.shape[1]
     tr_pt_1 = params[train_trajectories, p1]
     tr_pt_2 = params[train_trajectories, p2]
+    if n_params > 2:
+        rows, ind = np.unique(params[:, [p1, p2]], axis=0, return_inverse=True)
+        indices_dict = defaultdict(list)
+        [indices_dict[tuple(rows[i])].append(idx) for idx, i in enumerate(ind)]
+        error = np.array([np.mean(error[indices]) for indices in indices_dict.values()])
+        tr_pt = [i for i in indices_dict if any(idx in train_trajectories for idx in indices_dict[i])]
+        tr_pt_1 = [t[0] for t in tr_pt]
+        tr_pt_2 = [t[1] for t in tr_pt]
     X1, X2 = np.meshgrid(mu1_range, mu2_range, indexing='ij')
     output = np.reshape(error, (len(mu1_range), len(mu2_range)))
     fig = plt.figure('Relative Error 2D '+vars)
