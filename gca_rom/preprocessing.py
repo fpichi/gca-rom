@@ -136,44 +136,21 @@ def delete_initial_condition(dataset, params, mu_space, n_comp, n_snap_time):
 
 def shrink_dataset(dataset, mu_space, n_sim, n_snap2keep, n_comp):
     time = mu_space[-1]
-    n_snap = len(time)
-    idx_time = np.round(np.linspace(0, n_snap-1, n_snap2keep)).astype(int)
+    n_time = len(time)
+    idx_time = np.round(np.linspace(0, n_time-1, n_snap2keep)).astype(int)
     mu_space[-1] = time[idx_time]
-    n_time_step = int(n_snap/n_snap2keep)+1
+
+    idx = np.copy(idx_time)
+    for i in range(1, n_sim):
+        idx_time += n_time
+        idx = np.hstack((idx, idx_time))
 
     if n_comp == 1:
-        new_U = []
-        new_xx = []
-        new_yy = []
-        for i in range(n_sim):
-            start = i*n_snap
-            new_U.append(dataset.U[:, start:start+n_snap:n_time_step])
-            new_xx.append(dataset.xx[:, start:start+n_snap:n_time_step])
-            new_yy.append(dataset.yy[:, start:start+n_snap:n_time_step])
-        new_U = np.concatenate(new_U, axis=1)
-        new_xx = np.concatenate(new_xx, axis=1)
-        new_yy = np.concatenate(new_yy, axis=1)
-        dataset.U = torch.tensor(new_U)
-        dataset.xx = torch.tensor(new_xx)
-        dataset.yy = torch.tensor(new_yy)
+        dataset.U = dataset.U[:, idx]
     elif n_comp == 2:
-        new_VX = []
-        new_VY = []
-        new_xx = []
-        new_yy = []
-        for i in range(n_sim):
-            start = i*n_snap
-            new_VX.append(dataset.VX[:, start:start+n_snap:n_time_step])
-            new_VY.append(dataset.VY[:, start:start+n_snap:n_time_step])
-            new_xx.append(dataset.xx[:, start:start+n_snap:n_time_step])
-            new_yy.append(dataset.yy[:, start:start+n_snap:n_time_step])
-        new_VX = np.concatenate(new_VX, axis=1)
-        new_VY = np.concatenate(new_VY, axis=1)
-        new_xx = np.concatenate(new_xx, axis=1)
-        new_yy = np.concatenate(new_yy, axis=1)
-        dataset.VX = torch.tensor(new_VX)
-        dataset.VY = torch.tensor(new_VY)
-        dataset.xx = torch.tensor(new_xx)
-        dataset.yy = torch.tensor(new_yy)
+        dataset.VX = dataset.VX[:, idx]
+        dataset.VY = dataset.VY[:, idx]
+    dataset.xx = dataset.xx[:, idx]
+    dataset.yy = dataset.yy[:, idx]
 
     return dataset, mu_space
