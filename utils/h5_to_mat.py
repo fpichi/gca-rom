@@ -39,8 +39,9 @@ def extract_edges_3d(tetrahedron):
                 edges.add(tuple(sorted(edge)))
     return list(edges)
 
-problem_names = ["poisson", "advection", "graetz", "diffusion", "elasticity", "poiseuille", "stokes_u"]
-pb = 0
+problem_names = ["poisson", "advection", "graetz", "diffusion", "poiseuille", "elasticity", "stokes_u", "holed_advection", "lid_cavity_u_nl", "moving_hole_advection"]
+pb = 1
+n_comp = 1
 
 # These lines define and open the path of the .h5 file
 h5_file = "../dataset/h5_files/" + problem_names[pb] + ".h5"
@@ -84,7 +85,8 @@ for i in range(len(f[iter_str])):
         y = mesh[:, 1:2]
         u = np.array(f[function_string+str(i)])
         if u.shape[1] > 1:
-            u = np.sqrt(np.sum(np.square(u), axis=1)).reshape((-1, 1))
+            if n_comp == 1: 
+                u = np.sqrt(np.sum(np.square(u), axis=1)).reshape((-1, 1))
         try:
             xx = np.concatenate([xx, x], axis=1)
             yy = np.concatenate([yy, y], axis=1)
@@ -100,7 +102,8 @@ for i in range(len(f[iter_str])):
         z = mesh[:, 2:3]
         u = np.array(f[function_string+str(i)])
         if u.shape[1] > 1:
-            u = np.sqrt(np.sum(np.square(u), axis=1)).reshape((-1, 1))
+            if n_comp == 1: 
+                u = np.sqrt(np.sum(np.square(u), axis=1)).reshape((-1, 1))
         try:
             xx = np.concatenate([xx, x], axis=1)
             yy = np.concatenate([yy, y], axis=1)
@@ -126,7 +129,11 @@ dataset = dict()
 dataset['T'] = triang.astype('float')
 dataset['E'] = edges.astype('float')
 dataset['dof'] = float(dof)
-dataset['U'] = solution
+if n_comp == 1:
+    dataset['U'] = solution
+else:
+    dataset['VX'] = solution[:,::3]
+    dataset['VY'] = solution[:,1::3]
 dataset['xx'] = xx
 dataset['yy'] = yy
 if dim == 3:
