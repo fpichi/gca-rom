@@ -127,8 +127,8 @@ With contributions from:
 - Francesco Sala (francesco.sala@epfl.ch)
 - Leonardo Trentini (leonardo.trentini@epfl.ch)
 
-<a href="https://github.com/fpichi/gca-rom/graphs/contributors">
+<!-- <a href="https://github.com/fpichi/gca-rom/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=fpichi/gca-rom" />
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
+Made with [contrib.rocks](https://contrib.rocks). -->
