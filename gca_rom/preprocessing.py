@@ -5,7 +5,7 @@ from torch_geometric.loader import DataLoader
 from gca_rom import scaling
 
 
-def graphs_dataset(dataset, HyperParams):
+def graphs_dataset(dataset, HyperParams, param_sample=None):
     """
     graphs_dataset: function to process and scale the input dataset for graph autoencoder model.
 
@@ -48,20 +48,37 @@ def graphs_dataset(dataset, HyperParams):
 
     print("Number of nodes processed: ", num_nodes)
     print("Number of graphs processed: ", num_graphs)
-    total_sims = int(num_graphs)
     rate = HyperParams.rate/100
-    train_sims = int(rate * total_sims)
-    test_sims = total_sims - train_sims
-    main_loop = np.arange(total_sims).tolist()
-    np.random.shuffle(main_loop)
+    total_sims = int(num_graphs)
 
-    train_snapshots = main_loop[0:train_sims]
-    train_snapshots.sort()
-    test_snapshots = main_loop[train_sims:total_sims]
-    test_snapshots.sort()
+    if param_sample is None:
+        train_sims = int(rate * total_sims)
+        test_sims = total_sims - train_sims
+        main_loop = list(range(total_sims))
+        np.random.shuffle(main_loop)
 
+        train_snapshots = main_loop[0:train_sims]
+        train_snapshots.sort()
+        test_snapshots = main_loop[train_sims:total_sims]
+        test_snapshots.sort()
+    else:
+        train_param_sims = int(rate * param_sample)
+        main_loop = list(range(param_sample))
+        np.random.shuffle(main_loop)
+
+        train_param_snap = main_loop[0:train_param_sims]
+        train_param_snap.sort()
+        test_param_snap = main_loop[train_param_sims:param_sample]
+        test_param_snap.sort()
+        n_time = total_sims//param_sample
+        train_snapshots = [i*n_time+j for i in train_param_snap for j in range(n_time)]
+        test_snapshots = [i*n_time+j for i in test_param_snap for j in range(n_time)] 
+        train_sims = len(train_snapshots)
+        test_sims = len(test_snapshots)        
+
+
+    ## SCALING
     scaling_type = HyperParams.scaling_type
-    ## FEATURE SCALING
     if HyperParams.comp == 1:
         var_test = dataset.U[:, test_snapshots]
         scaler_all, VAR_all = scaling.tensor_scaling(var, scaling_type, HyperParams.scaler_number)
