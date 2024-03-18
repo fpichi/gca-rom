@@ -279,3 +279,34 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, 
     ax.set_aspect('equal', 'box')
     ax.set_title('Error field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
     plt.savefig(HyperParams.net_dir+'error_field_'+str(SNAP)+''+HyperParams.net_run+comp+'.png', bbox_inches='tight', dpi=500)
+
+
+def plot_latent_time(HyperParams, SAMPLE, latents, mu_space, params, param_sample):
+    """
+    This function plots the evolution of latent states over time and saves the plot as a .png file.
+
+    Parameters:
+    SNAP (int): The snapshot number.
+    latents (np.ndarray): The latent states.
+    params (list): The parameters.
+    HyperParams (object): The hyperparameters.
+
+    Returns:
+    None
+    """
+
+    plt.figure()
+    sequence_length = latents.shape[0] // param_sample
+    start = SAMPLE * sequence_length
+    end = start + sequence_length
+    time = mu_space[-1]
+
+    for i in range(HyperParams.bottleneck_dim):
+        stn_evolution = latents[start:end, i]
+        plt.plot(time, stn_evolution)
+
+    plt.xlabel('$t$')
+    plt.ylabel('$s(t)$')
+    plt.title('Latent state evolution $\mu = $'+ str(np.around(params[start][0:2].detach().numpy(), 2)))
+    plt.grid(True, which="both", ls="-", alpha=0.5)
+    plt.savefig(HyperParams.net_dir+'latent_evolution_'+HyperParams.net_run+str(SAMPLE)+'.png', bbox_inches='tight', dpi=500)
