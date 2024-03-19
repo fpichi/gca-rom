@@ -166,11 +166,10 @@ def plot_error_2d(res, VAR_all, scaler_all, HyperParams, mu_space, params, train
            ylim=tuple([mu2_range[0], mu2_range[-1]]),
            xlabel=f'$\mu_{str((p1%n_params)+1)}$',
            ylabel=f'$\mu_{str((p2%n_params)+1)}$')
-    ax.plot(tr_pt_1, tr_pt_2,'*r')
+    ax.plot(tr_pt_1, tr_pt_2, '*r')
     ax.set_title('Relative Error 2D '+vars)
     plt.tight_layout()
     plt.savefig(HyperParams.net_dir+'relative_error_2d_'+vars+HyperParams.net_run+'.png', transparent=True, dpi=500)
-    plt.show()
 
 
 def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params, comp="_U"):
@@ -310,3 +309,47 @@ def plot_latent_time(HyperParams, SAMPLE, latents, mu_space, params, param_sampl
     plt.title('Latent state evolution $\mu = $'+ str(np.around(params[start][0:2].detach().numpy(), 2)))
     plt.grid(True, which="both", ls="-", alpha=0.5)
     plt.savefig(HyperParams.net_dir+'latent_evolution_'+HyperParams.net_run+str(SAMPLE)+'.png', bbox_inches='tight', dpi=500)
+
+
+def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajectories, p1=0, p2=1):
+    """
+    This function plots the train/test sample used for the training
+    Parameters:
+    HyperParams (object): The HyperParams object holding the necessary hyperparameters
+    mu1_range (ndarray): Range of the first input variable
+    mu2_range (ndarray): Range of the second input variable
+    params (ndarray): The input variables
+    train_trajectories (ndarray): The indices of the training data
+    vars (str): The name of the variable being plotted
+    """
+
+    mu1_range = mu_space[p1]
+    mu2_range = mu_space[p2]
+    n_params = params.shape[1]
+    tr_pt_1 = params[train_trajectories, p1]
+    tr_pt_2 = params[train_trajectories, p2]
+    te_pt_1 = params[test_trajectories, p1]
+    te_pt_2 = params[test_trajectories, p2]
+    if n_params > 2:
+        rows, ind = np.unique(params[:, [p1, p2]], axis=0, return_inverse=True)
+        indices_dict = defaultdict(list)
+        [indices_dict[tuple(rows[i])].append(idx) for idx, i in enumerate(ind)]
+        tr_pt = [i for i in indices_dict if any(idx in train_trajectories for idx in indices_dict[i])]
+        te_pt = [i for i in indices_dict if any(idx in test_trajectories for idx in indices_dict[i])]
+        tr_pt_1 = [t[0] for t in tr_pt]
+        tr_pt_2 = [t[1] for t in tr_pt]
+        te_pt_1 = [s[0] for s in te_pt]
+        te_pt_2 = [s[1] for s in te_pt]
+
+    fig = plt.figure('Sample')
+    ax = fig.add_subplot()
+    ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]),
+           ylim=tuple([mu2_range[0], mu2_range[-1]]),
+           xlabel=f'$\mu_{str((p1%n_params)+1)}$',
+           ylabel=f'$\mu_{str((p2%n_params)+1)}$')
+    ax.scatter(tr_pt_1, tr_pt_2, marker='o', color="red", label='Training')
+    ax.scatter(te_pt_1, te_pt_2, marker='s', color="blue", label='Testing')
+    ax.set_title('Sample')
+    ax.legend()
+    plt.tight_layout()
+    plt.savefig(HyperParams.net_dir+'sample_'+HyperParams.net_run+'.png', transparent=True, dpi=500)
