@@ -4,6 +4,7 @@ from gca_rom import scaling
 from collections import defaultdict
 import matplotlib.gridspec as gridspec
 from matplotlib import colormaps
+import matplotlib.colors as mcolors
 from matplotlib import ticker
 from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -188,7 +189,7 @@ def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params, co
     The function generates a plot of the field solution and saves it to disk using the filepath specified in HyperParams.net_dir.
     """
 
-    fig = plt.figure()    
+    fig = plt.figure()
     Z_net = scaling.inverse_scaling(results, scaler_all, HyperParams.scaling_type)
     z_net = Z_net[:, SNAP]
     xx = xyz[0]
@@ -216,7 +217,7 @@ def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params, co
         ax.locator_params(axis='both', nbins=5)
     tick_locator = MaxNLocator(nbins=5)
     cbar.locator = tick_locator
-    cbar.ax.yaxis.set_offset_position('left')  
+    cbar.ax.yaxis.set_offset_position('left')
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
@@ -272,7 +273,7 @@ def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, 
         ax.locator_params(axis='both', nbins=5)
     tick_locator = MaxNLocator(nbins=5)
     cbar.locator = tick_locator
-    cbar.ax.yaxis.set_offset_position('left')  
+    cbar.ax.yaxis.set_offset_position('left')
     cbar.update_ticks()
     plt.tight_layout()
     ax.set_aspect('equal', 'box')
@@ -353,3 +354,145 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
     ax.legend()
     plt.tight_layout()
     plt.savefig(HyperParams.net_dir+'sample_'+HyperParams.net_run+'.png', transparent=True, dpi=500)
+
+
+def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, var=0, comp="_U"):
+    """
+    Plots the field solution for a given snapshot, the ground truth, and the error field.
+
+    The function takes in the following inputs:
+
+    SNAP: integer value indicating the snapshot to be plotted.
+    results: array of shape (num_samples, num_features), representing the network's output.
+    scaler_all: numpy.ndarray of scaling variables.
+    HyperParams: instance of the Autoencoder parameters class containing information about the network architecture and training.
+    dataset: array of shape (num_samples, 3), representing the Fenics dataset.
+    PARAMS: array of shape (num_snap,), containing the parameters associated with each snapshot.
+    TIMES: array of shape (num_snap,), containing the time associated with each snapshot.
+    
+    The function generates a plot of the field solution and saves it to disk using the filepath specified in HyperParams.net_dir.
+    """
+
+    plt.figure()
+    Z = scaling.inverse_scaling(VAR_all, scaler_all, HyperParams.scaling_type)
+    Z_net = scaling.inverse_scaling(results, scaler_all, HyperParams.scaling_type)
+    error = np.linalg.norm(Z_net - Z, axis=0) / np.linalg.norm(Z, axis=0)
+    SNAP = np.argmax(error)
+    z = Z[:, SNAP]
+    z_net = Z_net[:, SNAP]
+    xx = xyz[0]
+    yy = xyz[1]
+
+    fmt = ticker.ScalarFormatter(useMathText=True)
+    fmt.set_powerlimits((0, 0))
+    triang = np.asarray(dataset.T - 1)
+    gs1 = gridspec.GridSpec(1, 3)
+    error_abs = abs(z - z_net)
+    error_rel = error_abs/np.linalg.norm(z, 2)
+
+    # Subplot 1
+    norm1 = mcolors.Normalize(vmin=z.min(), vmax=z.max())
+    ax1 = plt.subplot(gs1[0, 0])
+    cs1 = ax1.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z, 100, cmap=colormaps['jet'], norm=norm1)
+    divider1 = make_axes_locatable(ax1)
+    cax1 = divider1.append_axes("right", size="5%", pad=0.1)
+    cbar1 = plt.colorbar(cs1, cax=cax1, format=fmt)
+    tick_locator = MaxNLocator(nbins=5)
+    cbar1.locator = tick_locator
+    cbar1.ax.yaxis.set_offset_position('left')
+    cbar1.update_ticks()
+    ax1.set_aspect('equal', 'box')
+    ax1.set_title('Truth')
+
+    # Subplot 2
+    norm2 = mcolors.Normalize(vmin=z_net.min(), vmax=z_net.max())
+    ax2 = plt.subplot(gs1[0, 1])
+    cs2 = ax2.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=colormaps['jet'], norm=norm2)
+    divider2 = make_axes_locatable(ax2)
+    cax2 = divider2.append_axes("right", size="5%", pad=0.1)
+    cbar2 = plt.colorbar(cs2, cax=cax2, format=fmt)
+    tick_locator = MaxNLocator(nbins=5)
+    cbar2.locator = tick_locator
+    cbar2.ax.yaxis.set_offset_position('left')
+    cbar2.update_ticks()
+    ax2.set_aspect('equal', 'box')
+    ax2.set_title('Prediction')
+
+    # Subplot 3
+    norm3 = mcolors.Normalize(vmin=error_rel.min(), vmax=error_rel.max())
+    ax3 = plt.subplot(gs1[0, 2])
+    cs3 = ax3.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error_rel, 100, cmap=colormaps['coolwarm'], norm=norm3)
+    divider3 = make_axes_locatable(ax3)
+    cax3 = divider3.append_axes("right", size="5%", pad=0.1)
+    cbar3 = plt.colorbar(cs3, cax=cax3, format=fmt)
+    tick_locator = MaxNLocator(nbins=5)
+    cbar3.locator = tick_locator
+    cbar3.ax.yaxis.set_offset_position('left')
+    cbar3.update_ticks()
+    ax3.set_aspect('equal', 'box')
+    ax3.set_title('Error')
+
+    # Adjust layout
+    plt.tight_layout()
+    plt.suptitle('Maximum error for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)), y=0.7)
+    plt.savefig(HyperParams.net_dir+'comparison_field_'+str(SNAP)+''+HyperParams.net_run+comp+'.png', bbox_inches='tight', dpi=500)
+
+
+def plot_error_3d(reconstruction, solution, scaler, HyperParams, mu_space, params, train_trajectories, vars, test_trajectories=None):
+    """
+    This function plots the relative error between the predicted and actual results in 3D
+
+    Parameters:
+    reconstruction (ndarray): The predicted results
+    VAR_all (ndarray): The actual results
+    scaler (object): The scaler object used for scaling the results
+    HyperParams (object): The HyperParams object holding the necessary hyperparameters
+    mu1_range (ndarray): Range of the first input variable
+    mu2_range (ndarray): Range of the second input variable
+    params (ndarray): The input variables
+    trajectories (ndarray): The indices of the training data
+    vars (str): The name of the variable being plotted
+    """
+
+    u_hf = scaling.inverse_scaling(solution, scaler, HyperParams.scaling_type)
+    u_app = scaling.inverse_scaling(reconstruction, scaler, HyperParams.scaling_type)
+    error = np.linalg.norm(u_app - u_hf, axis=0) / np.linalg.norm(u_hf, axis=0)
+    p1 = 0
+    p2 = 1
+    p3 = 2
+    mu1_range = mu_space[p1]
+    mu2_range = mu_space[p2]
+    mu3_range = mu_space[p3]
+    n_params = params.shape[0]
+    tr_pt_1 = params[train_trajectories, p1]
+    tr_pt_2 = params[train_trajectories, p2]
+    tr_pt_3 = params[train_trajectories, p3]    
+    if test_trajectories:
+        pt_1 = params[test_trajectories, p1]
+        pt_2 = params[test_trajectories, p2]
+        pt_3 = params[test_trajectories, p3]
+    else:
+        pt_1 = params[:, p1]
+        pt_2 = params[:, p2]
+        pt_3 = params[:, p3]
+    fig = plt.figure('Relative Error 3D '+vars)
+    ax = fig.add_subplot(projection='3d')
+    fmt = ticker.ScalarFormatter(useMathText=True)
+    fmt.set_powerlimits((0, 0))
+    colors = error.flatten()
+    sc = ax.scatter(pt_1, pt_2, pt_3, s=1000*colors, c=colors, cmap=colormaps['coolwarm'])
+    cbar = plt.colorbar(sc, format=fmt, shrink=0.5, pad=0.1)
+    tick_locator = MaxNLocator(nbins=5)
+    cbar.locator = tick_locator
+    cbar.ax.yaxis.set_offset_position('left')
+    cbar.update_ticks()    
+    ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]),
+           ylim=tuple([mu2_range[0], mu2_range[-1]]),
+           zlim=tuple([mu3_range[0], mu3_range[-1]]),
+           xlabel=f'$\mu_{str((p1%n_params)+1)}$',
+           ylabel=f'$\mu_{str((p2%n_params)+1)}$',
+           zlabel=f'$\mu_{str((p3%n_params)+1)}$')
+    ax.scatter(tr_pt_1, tr_pt_2, tr_pt_3, marker="*", color="red", s=10)
+    ax.set_title('Relative Error 3D '+vars)
+    plt.tight_layout()
+    plt.savefig(HyperParams.net_dir+'relative_error_3d_'+vars+HyperParams.net_run+'.png', transparent=True, dpi=500)
