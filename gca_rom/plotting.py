@@ -389,20 +389,37 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
     error_abs = abs(z - z_net)
     error_rel = error_abs/np.linalg.norm(z, 2)
 
-    if grid is "horizontal":
-        fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
-        y0=0.7
-    elif grid is "vertical":
-        fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+    if dataset.dim == 2:
+        if grid is "horizontal":
+            fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+            y0=0.7
+        elif grid is "vertical":
+            fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+            y0=1.1
+    elif dataset.dim == 3:
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, subplot_kw=dict(projection='3d'))
         y0=1.1
 
     # Subplot 1
-    norm1 = mcolors.Normalize(vmin=z.min(), vmax=z.max())
-    cs1 = ax1.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z, 100, cmap=colormaps['jet'], norm=norm1)
-    divider1 = make_axes_locatable(ax1)
-    cax1 = divider1.append_axes("right", size="5%", pad=0.1)
-    cbar1 = plt.colorbar(cs1, cax=cax1, format=fmt)
-    tick_locator = MaxNLocator(nbins=5)
+    if dataset.dim == 2:
+        norm1 = mcolors.Normalize(vmin=z.min(), vmax=z.max())
+        cs1 = ax1.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z, 100, cmap=colormaps['jet'], norm=norm1)
+        divider1 = make_axes_locatable(ax1)
+        cax1 = divider1.append_axes("right", size="5%", pad=0.1)
+        cbar1 = plt.colorbar(cs1, cax=cax1, format=fmt)
+    elif dataset.dim == 3:
+        zz = xyz[2]
+        cax1 = inset_axes(ax1, width="5%", height="60%", loc="center left", 
+                         bbox_to_anchor=(1.5, 0., 1, 1), bbox_transform=ax1.transAxes, borderpad=0)
+        p1 = ax1.scatter(xx[:, SNAP], yy[:, SNAP], zz[:, SNAP], c=z, cmap=colormaps['jet'], linewidth=0.5)
+        cbar1 = fig.colorbar(p1, ax=ax1, cax=cax1, format=fmt)
+        # ax1.set_xlabel('$x$')
+        # ax1.set_ylabel('$y$')
+        # ax1.set_zlabel('$z$')
+        ax1.locator_params(axis='x', nbins=2)
+        ax1.yaxis.set_ticklabels([])
+        ax1.zaxis.set_ticklabels([])        
+    tick_locator = MaxNLocator(nbins=3)
     cbar1.locator = tick_locator
     cbar1.ax.yaxis.set_offset_position('left')
     cbar1.update_ticks()
@@ -410,12 +427,25 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
     ax1.set_title('Truth')
 
     # Subplot 2
-    norm2 = mcolors.Normalize(vmin=z_net.min(), vmax=z_net.max())
-    cs2 = ax2.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=colormaps['jet'], norm=norm2)
-    divider2 = make_axes_locatable(ax2)
-    cax2 = divider2.append_axes("right", size="5%", pad=0.1)
-    cbar2 = plt.colorbar(cs2, cax=cax2, format=fmt)
-    tick_locator = MaxNLocator(nbins=5)
+    if dataset.dim == 2:
+        norm2 = mcolors.Normalize(vmin=z_net.min(), vmax=z_net.max())
+        cs2 = ax2.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=colormaps['jet'], norm=norm2)
+        divider2 = make_axes_locatable(ax2)
+        cax2 = divider2.append_axes("right", size="5%", pad=0.1)
+        cbar2 = plt.colorbar(cs2, cax=cax2, format=fmt)
+    elif dataset.dim == 3:
+        zz = xyz[2]
+        cax2 = inset_axes(ax2, width="5%", height="60%", loc="center left", 
+                         bbox_to_anchor=(1.5, 0., 1, 1), bbox_transform=ax2.transAxes, borderpad=0)
+        p2 = ax2.scatter(xx[:, SNAP], yy[:, SNAP], zz[:, SNAP], c=z_net, cmap=colormaps['jet'], linewidth=0.5)
+        cbar2 = fig.colorbar(p2, ax=ax2, cax=cax2, format=fmt)
+        # ax2.set_xlabel('$x$')
+        # ax2.set_ylabel('$y$')
+        # ax2.set_zlabel('$z$')
+        ax2.locator_params(axis='x', nbins=2)
+        ax2.yaxis.set_ticklabels([])
+        ax2.zaxis.set_ticklabels([])
+        tick_locator = MaxNLocator(nbins=3)
     cbar2.locator = tick_locator
     cbar2.ax.yaxis.set_offset_position('left')
     cbar2.update_ticks()
@@ -423,12 +453,25 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
     ax2.set_title('Prediction')
 
     # Subplot 3
-    norm3 = mcolors.Normalize(vmin=error_rel.min(), vmax=error_rel.max())
-    cs3 = ax3.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error_rel, 100, cmap=colormaps['coolwarm'], norm=norm3)
-    divider3 = make_axes_locatable(ax3)
-    cax3 = divider3.append_axes("right", size="5%", pad=0.1)
-    cbar3 = plt.colorbar(cs3, cax=cax3, format=fmt)
-    tick_locator = MaxNLocator(nbins=5)
+    if dataset.dim == 2:
+        norm3 = mcolors.Normalize(vmin=error_rel.min(), vmax=error_rel.max())
+        cs3 = ax3.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error_rel, 100, cmap=colormaps['coolwarm'], norm=norm3)
+        divider3 = make_axes_locatable(ax3)
+        cax3 = divider3.append_axes("right", size="5%", pad=0.1)
+        cbar3 = plt.colorbar(cs3, cax=cax3, format=fmt)
+    elif dataset.dim == 3:
+        zz = xyz[2]
+        cax3 = inset_axes(ax3, width="5%", height="60%", loc="center left", 
+                         bbox_to_anchor=(1.5, 0., 1, 1), bbox_transform=ax3.transAxes, borderpad=0)
+        p3 = ax3.scatter(xx[:, SNAP], yy[:, SNAP], zz[:, SNAP], c=error_rel, cmap=colormaps['coolwarm'], linewidth=0.5)
+        cbar3 = fig.colorbar(p3, ax=ax3, cax=cax3, format=fmt)
+        # ax3.set_xlabel('$x$')
+        # ax3.set_ylabel('$y$')
+        # ax3.set_zlabel('$z$')
+        ax3.locator_params(axis='x', nbins=2)
+        ax3.yaxis.set_ticklabels([])
+        ax3.zaxis.set_ticklabels([])
+        tick_locator = MaxNLocator(nbins=3)
     cbar3.locator = tick_locator
     cbar3.ax.yaxis.set_offset_position('left')
     cbar3.update_ticks()
