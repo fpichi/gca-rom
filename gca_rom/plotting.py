@@ -356,7 +356,7 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
     plt.savefig(HyperParams.net_dir+'sample_'+HyperParams.net_run+'.png', transparent=True, dpi=500)
 
 
-def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, var=0, comp="_U"):
+def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, grid="horizontal", comp="_U"):
     """
     Plots the field solution for a given snapshot, the ground truth, and the error field.
 
@@ -386,13 +386,18 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
     fmt = ticker.ScalarFormatter(useMathText=True)
     fmt.set_powerlimits((0, 0))
     triang = np.asarray(dataset.T - 1)
-    gs1 = gridspec.GridSpec(1, 3)
     error_abs = abs(z - z_net)
     error_rel = error_abs/np.linalg.norm(z, 2)
 
+    if grid is "horizontal":
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+        y0=0.7
+    elif grid is "vertical":
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+        y0=1.1
+
     # Subplot 1
     norm1 = mcolors.Normalize(vmin=z.min(), vmax=z.max())
-    ax1 = plt.subplot(gs1[0, 0])
     cs1 = ax1.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z, 100, cmap=colormaps['jet'], norm=norm1)
     divider1 = make_axes_locatable(ax1)
     cax1 = divider1.append_axes("right", size="5%", pad=0.1)
@@ -406,7 +411,6 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
 
     # Subplot 2
     norm2 = mcolors.Normalize(vmin=z_net.min(), vmax=z_net.max())
-    ax2 = plt.subplot(gs1[0, 1])
     cs2 = ax2.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=colormaps['jet'], norm=norm2)
     divider2 = make_axes_locatable(ax2)
     cax2 = divider2.append_axes("right", size="5%", pad=0.1)
@@ -420,7 +424,6 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
 
     # Subplot 3
     norm3 = mcolors.Normalize(vmin=error_rel.min(), vmax=error_rel.max())
-    ax3 = plt.subplot(gs1[0, 2])
     cs3 = ax3.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, error_rel, 100, cmap=colormaps['coolwarm'], norm=norm3)
     divider3 = make_axes_locatable(ax3)
     cax3 = divider3.append_axes("right", size="5%", pad=0.1)
@@ -434,7 +437,7 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
 
     # Adjust layout
     plt.tight_layout()
-    plt.suptitle('Maximum error for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)), y=0.7)
+    fig.suptitle('Maximum error for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)), y=y0)
     plt.savefig(HyperParams.net_dir+'comparison_field_'+str(SNAP)+''+HyperParams.net_run+comp+'.png', bbox_inches='tight', dpi=500)
 
 
