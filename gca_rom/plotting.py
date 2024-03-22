@@ -331,25 +331,29 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
     tr_pt_2 = params[train_trajectories, p2]
     te_pt_1 = params[test_trajectories, p1]
     te_pt_2 = params[test_trajectories, p2]
-    if param_frequency is True:
-        for i in range(len(params[train_trajectories][0])):
-            plot_idx=[]
-            plot_val=[]
-            vals, counts = np.unique(params[train_trajectories][:, i], return_counts=True)
-            args = vals.argsort()
-            vals = vals[args]
-            counts = counts[args]
-            for j in range(len(vals)):
-                mu = vals[j]
-                val = counts[j]
-                plot_idx.append(f'$\mu_{i}={np.around(mu, 2)}$')
-                plot_val.append(val)
-            plt.bar(plot_idx, plot_val)
-        plt.xticks(rotation=90)
-        plt.xlabel('Parameter')
-        plt.ylabel('Frequency in Training Set')
-    else:
-        if n_params > 2:
+
+    fig = plt.figure('Sample')
+    ax = fig.add_subplot()
+
+    if n_params > 2:
+        if param_frequency is True:
+            for i in range(len(params[train_trajectories][0])):
+                plot_idx=[]
+                plot_val=[]
+                vals, counts = np.unique(params[train_trajectories][:, i], return_counts=True)
+                args = vals.argsort()
+                vals = vals[args]
+                counts = counts[args]
+                for j in range(len(vals)):
+                    mu = vals[j]
+                    val = counts[j]
+                    plot_idx.append(f'$\mu_{i}={np.around(mu, 2)}$')
+                    plot_val.append(val)
+                plt.bar(plot_idx, plot_val)
+            plt.xticks(rotation=90)
+            plt.xlabel('Parameter')
+            plt.ylabel('Frequency in Training Set')
+        else:
             rows, ind = np.unique(params[:, [p1, p2]], axis=0, return_inverse=True)
             indices_dict = defaultdict(list)
             [indices_dict[tuple(rows[i])].append(idx) for idx, i in enumerate(ind)]
@@ -359,19 +363,18 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
             tr_pt_2 = [t[1] for t in tr_pt]
             te_pt_1 = [s[0] for s in te_pt]
             te_pt_2 = [s[1] for s in te_pt]
+    else:
+        ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]),
+            ylim=tuple([mu2_range[0], mu2_range[-1]]),
+            xlabel=f'$\mu_{str((p1%n_params)+1)}$',
+            ylabel=f'$\mu_{str((p2%n_params)+1)}$')
+        ax.scatter(tr_pt_1, tr_pt_2, marker='o', color="red", label='Training')
+        ax.scatter(te_pt_1, te_pt_2, marker='s', color="blue", label='Testing')
+        ax.legend()
 
-    fig = plt.figure('Sample')
-    ax = fig.add_subplot()
-    ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]),
-           ylim=tuple([mu2_range[0], mu2_range[-1]]),
-           xlabel=f'$\mu_{str((p1%n_params)+1)}$',
-           ylabel=f'$\mu_{str((p2%n_params)+1)}$')
-    ax.scatter(tr_pt_1, tr_pt_2, marker='o', color="red", label='Training')
-    ax.scatter(te_pt_1, te_pt_2, marker='s', color="blue", label='Testing')
     ax.set_title('Sample')
-    ax.legend()
     plt.tight_layout()
-    plt.savefig(HyperParams.net_dir+'sample_'+HyperParams.net_run+'.png', transparent=True, dpi=500)
+    plt.savefig(HyperParams.net_dir+'sample'+HyperParams.net_run+'.png', transparent=True, dpi=500)
 
 
 def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, grid="horizontal", comp="_U", adjust_title=None):
