@@ -468,7 +468,7 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
         ax2.locator_params(axis='x', nbins=2)
         ax2.yaxis.set_ticklabels([])
         ax2.zaxis.set_ticklabels([])
-        tick_locator = MaxNLocator(nbins=3)
+    tick_locator = MaxNLocator(nbins=3)
     cbar2.locator = tick_locator
     cbar2.ax.yaxis.set_offset_position('left')
     cbar2.update_ticks()
@@ -494,7 +494,7 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
         ax3.locator_params(axis='x', nbins=2)
         ax3.yaxis.set_ticklabels([])
         ax3.zaxis.set_ticklabels([])
-        tick_locator = MaxNLocator(nbins=3)
+    tick_locator = MaxNLocator(nbins=3)
     cbar3.locator = tick_locator
     cbar3.ax.yaxis.set_offset_position('left')
     cbar3.update_ticks()
