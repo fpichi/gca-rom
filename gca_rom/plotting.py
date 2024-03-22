@@ -312,7 +312,7 @@ def plot_latent_time(HyperParams, SAMPLE, latents, mu_space, params, param_sampl
     plt.savefig(HyperParams.net_dir+'latent_evolution_'+HyperParams.net_run+str(SAMPLE)+'.png', bbox_inches='tight', dpi=500)
 
 
-def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajectories, p1=0, p2=1):
+def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajectories, p1=0, p2=1, param_frequency=False):
     """
     This function plots the train/test sample used for the training
     Parameters:
@@ -331,16 +331,34 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
     tr_pt_2 = params[train_trajectories, p2]
     te_pt_1 = params[test_trajectories, p1]
     te_pt_2 = params[test_trajectories, p2]
-    if n_params > 2:
-        rows, ind = np.unique(params[:, [p1, p2]], axis=0, return_inverse=True)
-        indices_dict = defaultdict(list)
-        [indices_dict[tuple(rows[i])].append(idx) for idx, i in enumerate(ind)]
-        tr_pt = [i for i in indices_dict if any(idx in train_trajectories for idx in indices_dict[i])]
-        te_pt = [i for i in indices_dict if any(idx in test_trajectories for idx in indices_dict[i])]
-        tr_pt_1 = [t[0] for t in tr_pt]
-        tr_pt_2 = [t[1] for t in tr_pt]
-        te_pt_1 = [s[0] for s in te_pt]
-        te_pt_2 = [s[1] for s in te_pt]
+    if param_frequency is True:
+        for i in range(len(params[train_trajectories][0])):
+            plot_idx=[]
+            plot_val=[]
+            vals, counts = np.unique(params[train_trajectories][:, i], return_counts=True)
+            args = vals.argsort()
+            vals = vals[args]
+            counts = counts[args]
+            for j in range(len(vals)):
+                mu = vals[j]
+                val = counts[j]
+                plot_idx.append(f'$\mu_{i}={np.around(mu, 2)}$')
+                plot_val.append(val)
+            plt.bar(plot_idx, plot_val)
+        plt.xticks(rotation=90)
+        plt.xlabel('Parameter')
+        plt.ylabel('Frequency in Training Set')
+    else:
+        if n_params > 2:
+            rows, ind = np.unique(params[:, [p1, p2]], axis=0, return_inverse=True)
+            indices_dict = defaultdict(list)
+            [indices_dict[tuple(rows[i])].append(idx) for idx, i in enumerate(ind)]
+            tr_pt = [i for i in indices_dict if any(idx in train_trajectories for idx in indices_dict[i])]
+            te_pt = [i for i in indices_dict if any(idx in test_trajectories for idx in indices_dict[i])]
+            tr_pt_1 = [t[0] for t in tr_pt]
+            tr_pt_2 = [t[1] for t in tr_pt]
+            te_pt_1 = [s[0] for s in te_pt]
+            te_pt_2 = [s[1] for s in te_pt]
 
     fig = plt.figure('Sample')
     ax = fig.add_subplot()
@@ -356,7 +374,7 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
     plt.savefig(HyperParams.net_dir+'sample_'+HyperParams.net_run+'.png', transparent=True, dpi=500)
 
 
-def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, grid="horizontal", comp="_U"):
+def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, grid="horizontal", comp="_U", adjust_title=None):
     """
     Plots the field solution for a given snapshot, the ground truth, and the error field.
 
@@ -390,15 +408,17 @@ def plot_comparison_fields(results, VAR_all, scaler_all, HyperParams, dataset, x
     error_rel = error_abs/np.linalg.norm(z, 2)
 
     if dataset.dim == 2:
-        if grid is "horizontal":
+        if grid == "horizontal":
             fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
             y0=0.7
-        elif grid is "vertical":
+        elif grid == "vertical":
             fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
             y0=1.1
     elif dataset.dim == 3:
         fig, (ax1, ax2, ax3) = plt.subplots(3, 1, subplot_kw=dict(projection='3d'))
         y0=1.1
+    if adjust_title is not None:
+        y0 = adjust_title
 
     # Subplot 1
     if dataset.dim == 2:
