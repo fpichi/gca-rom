@@ -335,25 +335,25 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
     fig = plt.figure('Sample')
     ax = fig.add_subplot()
 
-    if n_params > 2:
-        if param_frequency is True:
-            for i in range(len(params[train_trajectories][0])):
-                plot_idx=[]
-                plot_val=[]
-                vals, counts = np.unique(params[train_trajectories][:, i], return_counts=True)
-                args = vals.argsort()
-                vals = vals[args]
-                counts = counts[args]
-                for j in range(len(vals)):
-                    mu = vals[j]
-                    val = counts[j]
-                    plot_idx.append(f'$\mu_{i}={np.around(mu, 2)}$')
-                    plot_val.append(val)
-                plt.bar(plot_idx, plot_val)
-            plt.xticks(rotation=90)
-            plt.xlabel('Parameter')
-            plt.ylabel('Frequency in Training Set')
-        else:
+    if param_frequency is True:
+        for i in range(len(params[train_trajectories][0])):
+            plot_idx=[]
+            plot_val=[]
+            vals, counts = np.unique(params[train_trajectories][:, i], return_counts=True)
+            args = vals.argsort()
+            vals = vals[args]
+            counts = counts[args]
+            for j in range(len(vals)):
+                mu = vals[j]
+                val = counts[j]
+                plot_idx.append(f'$\mu_{i}={np.around(mu, 2)}$')
+                plot_val.append(val)
+            plt.bar(plot_idx, plot_val)
+        plt.xticks(rotation=90)
+        plt.xlabel('Parameter')
+        plt.ylabel('Frequency in Training Set')
+    else:
+        if n_params > 2:
             rows, ind = np.unique(params[:, [p1, p2]], axis=0, return_inverse=True)
             indices_dict = defaultdict(list)
             [indices_dict[tuple(rows[i])].append(idx) for idx, i in enumerate(ind)]
@@ -363,7 +363,6 @@ def plot_sample(HyperParams, mu_space, params, train_trajectories, test_trajecto
             tr_pt_2 = [t[1] for t in tr_pt]
             te_pt_1 = [s[0] for s in te_pt]
             te_pt_2 = [s[1] for s in te_pt]
-    else:
         ax.set(xlim=tuple([mu1_range[0], mu1_range[-1]]),
             ylim=tuple([mu2_range[0], mu2_range[-1]]),
             xlabel=f'$\mu_{str((p1%n_params)+1)}$',
