@@ -648,7 +648,7 @@ def create_animation(SAMPLE, VAR_all, scaler_all, HyperParams, dataset, xyz, par
     ax = plt.subplot(gs1[0, 0])
     sequence_length = VAR_all.shape[0] // param_sample
     start = SAMPLE * sequence_length
-    cs = ax.tricontourf(xx[:, SAMPLE], yy[:, SAMPLE], triang, Z[:, SAMPLE], 100, cmap=colormaps['jet'])
+    cs = ax.tricontourf(xx[:, start], yy[:, start], triang, Z[:, start], 100, cmap=colormaps['jet'])
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.1)
     cbar = plt.colorbar(cs, cax=cax, format=fmt)
