@@ -7,6 +7,7 @@ from matplotlib import colormaps
 import matplotlib.colors as mcolors
 from matplotlib import ticker
 from matplotlib.ticker import MaxNLocator
+import matplotlib.animation as animation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -223,6 +224,59 @@ def plot_fields(SNAP, results, scaler_all, HyperParams, dataset, xyz, params, co
     ax.set_aspect('equal', 'box')
     ax.set_title('Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
     plt.savefig(HyperParams.net_dir+'field_solution_'+str(SNAP)+''+HyperParams.net_run+comp+'.png', bbox_inches='tight', dpi=500)
+
+
+def plot_truth(SNAP, VAR_all, scaler_all, HyperParams, dataset, xyz, params, comp="_U"):
+    """
+    Plots the truth solution for a given snapshot.
+
+    The function takes in the following inputs:
+
+    SNAP: integer value indicating the snapshot to be plotted.
+    VAR_all: array of shape (num_samples, num_features), representing the truth solution.
+    scaler_all: instance of the scaler used to scale the data.
+    HyperParams: instance of the Autoencoder parameters class containing information about the network architecture and training.
+    dataset: array of shape (num_samples, 3), representing the triangulation of the spatial domain.
+    xyz: list of arrays of shape (num_samples, num_features), containing the x, y and z-coordinates of the domain.
+    params: array of shape (num_features,), containing the parameters associated with each snapshot.
+    The function generates a plot of the field solution and saves it to disk using the filepath specified in HyperParams.net_dir.
+    """
+
+    fig = plt.figure()
+    Z_net = scaling.inverse_scaling(VAR_all, scaler_all, HyperParams.scaling_type)
+    z_net = Z_net[:, SNAP]
+    xx = xyz[0]
+    yy = xyz[1]
+    fmt = ticker.ScalarFormatter(useMathText=True)
+    fmt.set_powerlimits((0, 0))
+    if dataset.dim == 2:
+        triang = np.asarray(dataset.T - 1)
+        gs1 = gridspec.GridSpec(1, 1)
+        ax = plt.subplot(gs1[0, 0])
+        cs = ax.tricontourf(xx[:, SNAP], yy[:, SNAP], triang, z_net, 100, cmap=colormaps['jet'])
+        ax.triplot(xx[:, SNAP], yy[:, SNAP], triang, lw=0.5, color="black")
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.1)
+        cbar = plt.colorbar(cs, cax=cax, format=fmt)
+    elif dataset.dim == 3:
+        zz = xyz[2]
+        ax = fig.add_subplot(projection='3d')
+        cax = inset_axes(ax, width="5%", height="60%", loc="center left", 
+                         bbox_to_anchor=(1.15, 0., 1, 1), bbox_transform=ax.transAxes, borderpad=0)
+        p = ax.scatter(xx[:, SNAP], yy[:, SNAP], zz[:, SNAP], c=z_net, cmap=colormaps['jet'], linewidth=0.5)
+        cbar = fig.colorbar(p, ax=ax, cax=cax, format=fmt)
+        ax.set_xlabel('$x$')
+        ax.set_ylabel('$y$')
+        ax.set_zlabel('$z$')
+        ax.locator_params(axis='both', nbins=5)
+    tick_locator = MaxNLocator(nbins=5)
+    cbar.locator = tick_locator
+    cbar.ax.yaxis.set_offset_position('left')
+    cbar.update_ticks()
+    plt.tight_layout()
+    ax.set_aspect('equal', 'box')
+    ax.set_title('HF Solution field for $\mu$ = '+str(np.around(params[SNAP].detach().numpy(), 2)))
+    plt.savefig(HyperParams.net_dir+'hf_field_solution_'+str(SNAP)+''+HyperParams.net_run+comp+'.png', bbox_inches='tight', dpi=500)
 
 
 def plot_error_fields(SNAP, results, VAR_all, scaler_all, HyperParams, dataset, xyz, params, comp="_U"):
@@ -564,3 +618,57 @@ def plot_error_3d(reconstruction, solution, scaler, HyperParams, mu_space, param
     ax.set_title('Relative Error 3D '+vars)
     plt.tight_layout()
     plt.savefig(HyperParams.net_dir+'relative_error_3d_'+vars+HyperParams.net_run+'.png', transparent=True, dpi=500)
+
+
+def create_animation(SAMPLE, VAR_all, scaler_all, HyperParams, dataset, xyz, params, param_sample, comp="_U"):
+    """
+    Create animation for time-dependent solutions .
+
+    The function takes in the following inputs:
+
+    SAMPLE: integer value indicating the snapshot to be plotted.
+    VAR_all: array of shape (num_samples, num_features), representing the truth solution.
+    scaler_all: instance of the scaler used to scale the data.
+    HyperParams: instance of the Autoencoder parameters class containing information about the network architecture and training.
+    dataset: array of shape (num_samples, 3), representing the triangulation of the spatial domain.
+    xyz: list of arrays of shape (num_samples, num_features), containing the x, y and z-coordinates of the domain.
+    params: array of shape (num_features,), containing the parameters associated with each snapshot.
+    The function generates a plot of the field solution and saves it to disk using the filepath specified in HyperParams.net_dir.
+    """
+
+
+    fig = plt.figure()
+    Z = scaling.inverse_scaling(VAR_all, scaler_all, HyperParams.scaling_type)
+    xx = xyz[0]
+    yy = xyz[1]
+    fmt = ticker.ScalarFormatter(useMathText=True)
+    fmt.set_powerlimits((0, 0))
+    triang = np.asarray(dataset.T - 1)
+    gs1 = gridspec.GridSpec(1, 1)
+    ax = plt.subplot(gs1[0, 0])
+    sequence_length = VAR_all.shape[0] // param_sample
+    start = SAMPLE * sequence_length
+    cs = ax.tricontourf(xx[:, SAMPLE], yy[:, SAMPLE], triang, Z[:, SAMPLE], 100, cmap=colormaps['jet'])
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%", pad=0.1)
+    cbar = plt.colorbar(cs, cax=cax, format=fmt)
+    tick_locator = MaxNLocator(nbins=5)
+    cbar.locator = tick_locator
+    cbar.ax.yaxis.set_offset_position('left')
+    cbar.update_ticks()
+
+    def update_animation(i):
+        cs = ax.tricontourf(xx[:, i+start], yy[:, i+start], triang, Z[:, i+start], 100, cmap=colormaps['jet'])
+        # ax.triplot(xx[:, SAMPLE], yy[:, SAMPLE], triang, lw=0.5, color="black")
+        plt.tight_layout()
+        ax.set_aspect('equal', 'box')
+        ax.set_title('Rollout Solution field for $\mu$ = '+str(np.around(params[SAMPLE][:-1].detach().numpy(), 2)))
+        return cs
+
+    anim = animation.FuncAnimation(fig=fig, func=update_animation, frames=sequence_length, interval=30)
+    gif = animation.PillowWriter(fps=10)
+    anim.save(HyperParams.net_dir+'rollout_field_solution_'+str(SAMPLE)+''+HyperParams.net_run+comp+'.gif', writer=gif)
+    plt.close()
+    return anim
+
+
