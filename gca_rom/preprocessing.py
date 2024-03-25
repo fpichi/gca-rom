@@ -148,6 +148,9 @@ def delete_initial_condition(dataset, params, mu_space, n_comp, n_snap_time):
         dataset.VY = dataset.VY[:, indices]
     else:
         print("Invalid dimension. Please enter 1 or 2.")
+    
+    dataset.xx = dataset.xx[:, indices]
+    dataset.yy = dataset.yy[:, indices]
     return dataset, params, mu_space
 
 
