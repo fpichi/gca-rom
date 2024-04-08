@@ -145,4 +145,14 @@ def problem(argument):
             n_param = 3
             dim_pde = 2
             n_comp = 1
+        case 14:
+            problem_name = "square_adv"
+            variable = 'U'
+            mu1 = np.linspace(-3., 3., 5)
+            mu2 = np.linspace(-3., 3., 5)
+            mu3 = np.linspace(0., 2., 101)
+            mu_space = [mu1, mu2, mu3]
+            n_param = 3
+            dim_pde = 2
+            n_comp = 1
     return problem_name, variable, mu_space, n_param, dim_pde, n_comp
