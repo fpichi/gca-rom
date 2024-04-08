@@ -77,7 +77,7 @@ To run a benchmark, navigate to the tutorial folder and run the corresponding *f
 <img src="docs/images/gui.png" width="90%" height="70%"/></p>
 
 After the GCA-ROM is evaluated, many plots are automatically generated, ranging from training losses, latent evolution, relative errors, solution and error fields, and gif of the dynamics.
-Below are some snaphots of the approximated solutions for the available becnhamrks:
+Below are some snaphots of the approximated solutions for the available benchmarks:
 
 <p align="center">
 <img src="tutorials/poisson/_standard/U_poisson_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_63_standard_U.png" width="35.7%" height="70%"/>
@@ -116,7 +116,7 @@ If you use GCA-ROM for academic research, you are encouraged to cite the paper u
 ```
 
 ## Authors and contributors
-- Federico Pichi (federico.pichi@epfl.ch)
+- Federico Pichi (fpichi@sissa.it)
 - Beatriz Moya García (beatriz.moya@cnrsatcreate.sg)
 
 in collaboration with the MCSS group at EPFL of Prof. Jan S. Hesthaven.
@@ -127,9 +127,3 @@ With contributions from:
 - Francesco Pettenon (francesco.pettenon@epfl.ch)
 - Francesco Sala (francesco.sala@epfl.ch)
 - Leonardo Trentini (leonardo.trentini@epfl.ch)
-
-<!-- <a href="https://github.com/fpichi/gca-rom/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=fpichi/gca-rom" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks). -->
