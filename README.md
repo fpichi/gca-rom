@@ -61,36 +61,37 @@ behavior in a vector;</li>
 
 ## Tutorials
 
-The nonlinear ROM methodology has been tested on 10 different benchmarks, including:
-* scalar/vector and linear/nonlinear equations (*01_poisson.py*)
-* advection-dominated regime (*02_advection.py*)
-* physical and geometrical parametrizations (*03_graetz.py*)
-* bifurcating phenomena (*04_navier_stokes_vx.py*, *05_navier_stokes_vy.py*, *06_navier_stokes_p.py*)
-* time-dependent models (*07_diffusion.py*, *08_poiseuille.py*)
-* a 3D elastic problem (*09_elasticity.py*)
-* high-dimensional parametric applications (*10_stokes.py*)
+The nonlinear ROM methodology has been tested on 14 different benchmarks, including:
+* scalar/vector and linear/nonlinear equations (*01_poisson.ipynb*)
+* advection-dominated regime (*02_advection.ipynb*)
+* physical and geometrical parametrizations (*03_graetz.ipynb*)
+* bifurcating phenomena (*04_navier_stokes_vx.ipynb*, *05_navier_stokes_vy.ipynb*, *06_navier_stokes_p.ipynb*)
+* time-dependent models (*07_diffusion.ipynb*, *08_poiseuille.ipynb*)
+* a 3D elastic problem (*09_elasticity.ipynb*)
+* high-dimensional parametric applications (*10_stokes.ipynb*)
+* complex time-dependent problems (*11_holed_advection.ipynb*, *12_lid_driven_cavity.ipynb*, *13_moving_hole_advection.ipynb*)
 
-To run a benchmark, navigate to the tutorial folder and run the corresponding *file.py*. If available, a GUI will open with preset values for the hyperparameter configuration of the network. Once the window is closed, the code starts the training phase, unless a trained model with the same configuration already exists. 
+To run a benchmark, navigate to the tutorial folder and run the corresponding *file.ipynb*. If available, a GUI will open with preset values for the hyperparameter configuration of the network. Once the window is closed, the code starts the training phase, unless a trained model with the same configuration already exists. 
 
 <p align="center">
 <img src="docs/images/gui.png" width="90%" height="70%"/></p>
 
-After the GCA-ROM is evaluated, many plots are automatically generated, ranging from training losses, latent evolution, relative errors, solution and error fields
+After the GCA-ROM is evaluated, many plots are automatically generated, ranging from training losses, latent evolution, relative errors, solution and error fields, and gif of the dynamics.
 Below are some snaphots of the approximated solutions for the available becnhamrks:
 
 <p align="center">
-<img src="tutorials/poisson/_standard/U_poisson_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_63_standard.png" width="35.7%" height="70%"/>
-<img src="tutorials/advection/_standard/U_advection_lmap10.0_btt15_seed10_lv4_hc2_nd100_ffn200_skip1_lr0.001_sc4_rate30/field_solution_46_standard.png" width="31%" height="70%"/>
-<img src="tutorials/elasticity/_standard/U_elasticity_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_79_standard.png" width="32%" height="70%"/>
-<img src="tutorials/graetz/_standard/U_graetz_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_175_standard.png" width="60.1%" height="70%"/>
-<img src="tutorials/graetz/_standard/U_graetz_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_4_standard.png" width="38.3%" height="70%"/>
-<img src="tutorials/poiseuille/_standard/U_poiseuille_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_910_standard.png" width="62%" height="70%"/>
-<img src="tutorials/diffusion/_standard/U_diffusion_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_27_standard.png" width="36.5%" height="70%"/>
-<img src="tutorials/stokes_u/_standard/U_stokes_u_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_7_standard.png" width="34%" height="70%"/>
-<img src="tutorials/stokes_u/_standard/U_stokes_u_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_525_standard.png" width="32%" height="70%"/>
-<img src="tutorials/stokes_u/_standard/U_stokes_u_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_326_standard.png" width="32%" height="70%"/>
-<img src="tutorials/navier_stokes/_standard/VX_navier_stokes_lmap1.0_btt25_seed10_lv4_hc3_nd100_ffn200_skip1_lr0.001_sc4_rate10/field_solution_57_standard.png" width="49%" height="70%"/>
-<img src="tutorials/navier_stokes/_standard/VY_navier_stokes_lmap1.0_btt25_seed10_lv4_hc3_nd100_ffn200_skip1_lr0.001_sc4_rate10/field_solution_150_standard.png" width="49%" height="70%"/>
+<img src="tutorials/poisson/_standard/U_poisson_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_63_standard_U.png" width="35.7%" height="70%"/>
+<img src="tutorials/advection/_standard/U_advection_lmap10.0_btt15_seed10_lv4_hc2_nd100_ffn200_skip1_lr0.001_sc4_rate30/field_solution_46_standard_U.png" width="31%" height="70%"/>
+<img src="tutorials/elasticity/_standard/U_elasticity_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_79_standard_U.png" width="32%" height="70%"/>
+<img src="tutorials/graetz/_standard/U_graetz_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_175_standard_U.png" width="60.1%" height="70%"/>
+<img src="tutorials/graetz/_standard/U_graetz_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_4_standard_U.png" width="38.3%" height="70%"/>
+<img src="tutorials/poiseuille/_standard/U_poiseuille_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_388_standard_U.png" width="62%" height="70%"/>
+<img src="tutorials/diffusion/_standard/U_diffusion_lmap10.0_btt15_seed10_lv4_hc3_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_27_standard_U.png" width="34.85%" height="70%"/>
+<img src="tutorials/stokes_u/_standard/U_stokes_u_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_7_standard_U.png" width="32%" height="70%"/>
+<img src="tutorials/stokes_u/_standard/U_stokes_u_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_266_standard_U.png" width="32.5%" height="70%"/>
+<img src="tutorials/stokes_u/_standard/U_stokes_u_lmap10.0_btt25_seed10_lv4_hc2_nd50_ffn200_skip1_lr0.001_sc4_rate30/field_solution_326_standard_U.png" width="30%" height="70%"/>
+<img src="tutorials/navier_stokes/_standard/VX_navier_stokes_lmap1.0_btt25_seed10_lv4_hc3_nd100_ffn200_skip1_lr0.001_sc4_rate10/field_solution_57_standard_U.png" width="49%" height="70%"/>
+<img src="tutorials/navier_stokes/_standard/VY_navier_stokes_lmap1.0_btt25_seed10_lv4_hc3_nd100_ffn200_skip1_lr0.001_sc4_rate10/field_solution_150_standard_U.png" width="49%" height="70%"/>
 </p>
 
 
