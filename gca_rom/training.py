@@ -46,7 +46,6 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
             out, z, z_estimation = model(data, params[train_trajectories[start_ind:start_ind+data.batch_size], :])
             loss_train_mse += F.mse_loss(out, data.x, reduction='sum')/(len(train_trajectories)*HyperParams.num_nodes*HyperParams.comp)
             loss_train_map += F.mse_loss(z_estimation, z, reduction='sum')/(len(train_trajectories)*HyperParams.bottleneck_dim)
-            total_examples += 1
             start_ind += data.batch_size
         loss_train = loss_train_mse + HyperParams.lambda_map * loss_train_map
         loss_train.backward()
@@ -78,7 +77,6 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
                     out, z, z_estimation = model(data, params[test_trajectories[start_ind:start_ind+data.batch_size], :])
                     loss_test_mse += F.mse_loss(out, data.x, reduction='sum')/(len(test_trajectories)*HyperParams.num_nodes)
                     loss_test_map += F.mse_loss(z_estimation, z, reduction='sum')/(len(test_trajectories)*HyperParams.bottleneck_dim)
-                    total_examples += 1
                     start_ind += data.batch_size
                 loss_test = loss_test_mse +  HyperParams.lambda_map * loss_test_map
                 sum_loss += loss_test.item()
