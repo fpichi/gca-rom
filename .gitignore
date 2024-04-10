@@ -7,3 +7,4 @@ docs/_templates
 *.npy
 *.csv
 *tmp
+.ipynb_checkpoints/
