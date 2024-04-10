@@ -33,7 +33,7 @@ class HyperParams:
         cross_validation (bool): Whether to perform cross-validation.
     """
 
-    def __init__(self, argv):
+    def __init__(self, argv, **kwargs):
         self.net_name = argv[0]
         self.variable = argv[1]
         self.scaling_type = int(argv[2])
