@@ -105,16 +105,16 @@ def graphs_dataset(dataset, HyperParams, param_sample=None):
             pos = torch.cat((xx[:, graph].unsqueeze(1), yy[:, graph].unsqueeze(1), zz[:, graph].unsqueeze(1)), 1)
         ei = torch.index_select(pos, 0, edge_index[0, :])
         ej = torch.index_select(pos, 0, edge_index[1, :])
-        edge_diff = ej - ei
+        edge_attr = torch.abs(ej - ei)
         if dataset.dim == 2:
-            edge_attr = torch.sqrt(torch.pow(edge_diff[:, 0], 2) + torch.pow(edge_diff[:, 1], 2))
+            edge_weight = torch.sqrt(torch.pow(edge_attr[:, 0], 2) + torch.pow(edge_attr[:, 1], 2)).unsqueeze(1)
         elif dataset.dim == 3:
-            edge_attr = torch.sqrt(torch.pow(edge_diff[:, 0], 2) + torch.pow(edge_diff[:, 1], 2) + torch.pow(edge_diff[:, 2], 2))
+            edge_weight = torch.sqrt(torch.pow(edge_attr[:, 0], 2) + torch.pow(edge_attr[:, 1], 2) + torch.pow(edge_attr[:, 2], 2)).unsqueeze(1)
         if HyperParams.comp == 1:
             node_features = VAR_all[graph, :]
         else:
             node_features = VAR_all[graph, :, :]
-        dataset_graph = Data(x=node_features, edge_index=edge_index, edge_attr=edge_attr, pos=pos)
+        dataset_graph = Data(x=node_features, edge_index=edge_index, edge_weight=edge_weight, edge_attr=edge_attr, pos=pos)
         graphs.append(dataset_graph)
 
     HyperParams.num_nodes = dataset_graph.num_nodes

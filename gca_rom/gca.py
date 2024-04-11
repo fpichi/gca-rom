@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
-from torch_geometric.nn import GMMConv
+import torch_geometric.nn as gnn
 
 
 class Encoder(torch.nn.Module):
@@ -27,7 +27,7 @@ class Encoder(torch.nn.Module):
     forward(data): A convenience function that calls the encoder method.
     """
 
-    def __init__(self, hidden_channels, bottleneck, input_size, ffn, skip, act=F.elu):
+    def __init__(self, hidden_channels, bottleneck, input_size, ffn, skip, act=F.elu, conv='GMMConv'):
         super().__init__()
         self.hidden_channels = hidden_channels
         self.depth = len(self.hidden_channels)
@@ -36,22 +36,33 @@ class Encoder(torch.nn.Module):
         self.skip = skip
         self.bottleneck = bottleneck
         self.input_size = input_size
+        self.conv = conv
 
         self.down_convs = torch.nn.ModuleList()
         for i in range(self.depth-1):
-            self.down_convs.append(GMMConv(self.hidden_channels[i], self.hidden_channels[i+1], dim=1, kernel_size=5))
+            if self.conv=='GMMConv':
+                self.down_convs.append(gnn.GMMConv(self.hidden_channels[i], self.hidden_channels[i+1], dim=1, kernel_size=5))
+            elif self.conv=='ChebConv':
+                self.down_convs.append(gnn.ChebConv(self.hidden_channels[i], self.hidden_channels[i+1], K=5))
+            elif self.conv=='GCNConv':
+                self.down_convs.append(gnn.GCNConv(self.hidden_channels[i], self.hidden_channels[i+1]))
+            elif self.conv=='GATConv':
+                self.down_convs.append(gnn.GATConv(self.hidden_channels[i], self.hidden_channels[i+1]))
+            else:
+                raise NotImplementedError('Invalid convolution selected. Please select one of [GMMConv, ChebConv, GCNConv, GATConv]')
 
         self.fc_in1 = nn.Linear(self.input_size*self.hidden_channels[-1], self.ffn)
         self.fc_in2 = nn.Linear(self.ffn, self.bottleneck)
         self.reset_parameters()
 
     def encoder(self, data):
-        edge_weight = data.edge_attr
-        edge_index = data.edge_index
         x = data.x
         idx = 0
         for layer in self.down_convs:
-            x = self.act(layer(x, edge_index, edge_weight.unsqueeze(1)))
+            if self.conv in ['GMMConv', 'ChebConv', 'GCNConv']:
+                x = self.act(layer(x, data.edge_index, data.edge_weight))
+            elif self.conv in ['GATConv']:
+                x = self.act(layer(x, data.edge_index, data.edge_attr))
             if self.skip:
                 x = x + data.x
             idx += 1
@@ -103,7 +114,7 @@ class Decoder(torch.nn.Module):
             Performs a forward pass on the input data x and returns the output.
     """
 
-    def __init__(self, hidden_channels, bottleneck, input_size, ffn, skip, act=F.elu):
+    def __init__(self, hidden_channels, bottleneck, input_size, ffn, skip, act=F.elu, conv='GMMConv'):
         super().__init__()
         self.hidden_channels = hidden_channels
         self.depth = len(self.hidden_channels)
@@ -112,31 +123,41 @@ class Decoder(torch.nn.Module):
         self.skip = skip
         self.bottleneck = bottleneck
         self.input_size = input_size
+        self.conv = conv
 
         self.fc_out1 = nn.Linear(self.bottleneck, self.ffn)
         self.fc_out2 = nn.Linear(self.ffn, self.input_size * self.hidden_channels[-1])
 
         self.up_convs = torch.nn.ModuleList()
         for i in range(self.depth-1):
-            self.up_convs.append(GMMConv(self.hidden_channels[self.depth-1-i], self.hidden_channels[self.depth-i-2], dim=1, kernel_size=5))
+            if self.conv=='GMMConv':
+                self.up_convs.append(gnn.GMMConv(self.hidden_channels[self.depth-i-1], self.hidden_channels[self.depth-i-2], dim=1, kernel_size=5))
+            elif self.conv=='ChebConv':
+                self.up_convs.append(gnn.ChebConv(self.hidden_channels[self.depth-i-1], self.hidden_channels[self.depth-i-2], K=5))
+            elif self.conv=='GCNConv':
+                self.up_convs.append(gnn.GCNConv(self.hidden_channels[self.depth-i-1], self.hidden_channels[self.depth-i-2]))
+            elif self.conv=='GATConv':
+                self.up_convs.append(gnn.GATConv(self.hidden_channels[self.depth-i-1], self.hidden_channels[self.depth-i-2]))
+            else:
+                raise NotImplementedError('Invalid convolution selected. Please select one of [GMMConv, ChebConv, GCNConv, GATConv]')
+            
         
         self.reset_parameters()
 
 
     def decoder(self, x, data):
-        edge_weight = data.edge_attr
-        edge_index = data.edge_index
-
         x = self.act(self.fc_out1(x))
         x = self.act(self.fc_out2(x))
         h = x.reshape(data.num_graphs*self.input_size, self.hidden_channels[-1])
         x = h
         idx = 0
         for layer in self.up_convs:
-            if (idx == self.depth - 2): 
-                x = layer(x, edge_index, edge_weight.unsqueeze(1))
-            else: 
-                x = self.act(layer(x, edge_index, edge_weight.unsqueeze(1)))
+            if self.conv in ['GMMConv', 'ChebConv', 'GCNConv']:
+                x = layer(x, data.edge_index, data.edge_weight)
+            elif self.conv in ['GATConv']:
+                x = layer(x, data.edge_index, data.edge_attr)
+            if (idx != self.depth - 2):
+                x = self.act(x)
             if self.skip:
                 x = x + h
             idx += 1
