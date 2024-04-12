@@ -2,6 +2,7 @@ import torch
 import numpy as np
 from torch import nn
 from gca_rom import gca, scaling
+import torch.nn.functional as F
 
 
 class HyperParams:
@@ -51,7 +52,7 @@ class HyperParams:
         self.seed = 10
         self.tolerance = 1e-6
         self.learning_rate = 0.001
-        self.act = torch.tanh
+        self.map_act = 'tanh'
         self.layer_vec=[argv[11], self.nodes, self.nodes, self.nodes, self.nodes, self.bottleneck_dim]
         self.net_run = '_' + self.scaler_name
         self.weight_decay = 0.00001
@@ -62,6 +63,7 @@ class HyperParams:
         self.gamma = 0.0001
         self.num_nodes = 0
         self.conv = 'GMMConv'
+        self.ae_act = 'elu'
         self.batch_size = np.inf
         self.minibatch = False
         self.net_dir = './' + self.net_name + '/' + self.net_run + '/' + self.variable + '_' + self.net_name + '_lmap' + str(self.lambda_map) + '_btt' + str(self.bottleneck_dim) \
@@ -69,7 +71,8 @@ class HyperParams:
                             + '_ffn' + str(self.ffn) + '_skip' + str(self.skip) + '_lr' + str(self.learning_rate) + '_sc' + str(self.scaling_type) + '_rate' + str(self.rate) + '_conv' + self.conv + '/'
         self.cross_validation = True
 
-
+def get_activation(act_str):
+    return getattr(F, act_str)
 
 class Net(torch.nn.Module):
     """
@@ -111,10 +114,10 @@ class Net(torch.nn.Module):
 
     def __init__(self, HyperParams):
         super().__init__()
-        self.encoder = gca.Encoder(HyperParams.hidden_channels, HyperParams.bottleneck_dim, HyperParams.num_nodes, ffn=HyperParams.ffn, skip=HyperParams.skip, conv=HyperParams.conv)
-        self.decoder = gca.Decoder(HyperParams.hidden_channels, HyperParams.bottleneck_dim, HyperParams.num_nodes, ffn=HyperParams.ffn, skip=HyperParams.skip, conv=HyperParams.conv)
+        self.encoder = gca.Encoder(HyperParams.hidden_channels, HyperParams.bottleneck_dim, HyperParams.num_nodes, ffn=HyperParams.ffn, skip=HyperParams.skip, act=get_activation(HyperParams.ae_act), conv=HyperParams.conv)
+        self.decoder = gca.Decoder(HyperParams.hidden_channels, HyperParams.bottleneck_dim, HyperParams.num_nodes, ffn=HyperParams.ffn, skip=HyperParams.skip, act=get_activation(HyperParams.ae_act), conv=HyperParams.conv)
 
-        self.act_map = HyperParams.act
+        self.act_map = get_activation(HyperParams.map_act)
         self.layer_vec = HyperParams.layer_vec
         self.steps = len(self.layer_vec) - 1
 
