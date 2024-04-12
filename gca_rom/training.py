@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
 import numpy as np
-from tqdm import tqdm 
+from tqdm import tqdm
 
 def train(model, optimizer, device, scheduler, params, train_loader, test_loader, train_trajectories, test_trajectories, HyperParams):
     """Trains the autoencoder model.
@@ -37,27 +37,44 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
         train_rmse_1 = train_rmse_2 = 0
         sum_loss_1 = sum_loss_2 = 0
 
-        loss_train_mse = 0
-        loss_train_map = 0
         start_ind = 0
-        optimizer.zero_grad()
-        for data in train_loader:
-            data = data.to(device)  
-            out, z, z_estimation = model(data, params[train_trajectories[start_ind:start_ind+data.batch_size], :])
-            loss_train_mse += F.mse_loss(out, data.x, reduction='sum')/(len(train_trajectories)*HyperParams.num_nodes*HyperParams.comp)
-            loss_train_map += F.mse_loss(z_estimation, z, reduction='sum')/(len(train_trajectories)*HyperParams.bottleneck_dim)
-            start_ind += data.batch_size
-        loss_train = loss_train_mse + HyperParams.lambda_map * loss_train_map
-        loss_train.backward()
-        sum_loss += loss_train.item()
-        sum_loss_1 += loss_train_mse.item()
-        sum_loss_2 += loss_train_map.item()
-        optimizer.step()
-
+        if HyperParams.minibatch:
+            total_batches = 0
+            for data in train_loader:
+                optimizer.zero_grad()
+                data = data.to(device)  
+                out, z, z_estimation = model(data, params[train_trajectories[start_ind:start_ind+data.batch_size], :])
+                loss_train_mse = F.mse_loss(out, data.x, reduction='mean')
+                loss_train_map = F.mse_loss(z_estimation, z, reduction='mean')
+                loss_train = loss_train_mse + HyperParams.lambda_map * loss_train_map
+                loss_train.backward()
+                optimizer.step()
+                train_rmse += loss_train.item()
+                train_rmse_1 += loss_train_mse.item()
+                train_rmse_2 += loss_train_map.item()
+                total_batches += 1
+            train_rmse /= total_batches
+            train_rmse_1 /= total_batches
+            train_rmse_2 /= total_batches
+        else:
+            optimizer.zero_grad()
+            loss_train_mse = 0
+            loss_train_map = 0
+            for data in train_loader:
+                data = data.to(device)  
+                out, z, z_estimation = model(data, params[train_trajectories[start_ind:start_ind+data.batch_size], :])
+                loss_train_mse += F.mse_loss(out, data.x, reduction='sum')/(len(train_trajectories)*HyperParams.num_nodes*HyperParams.comp)
+                loss_train_map += F.mse_loss(z_estimation, z, reduction='sum')/(len(train_trajectories)*HyperParams.bottleneck_dim)
+                start_ind += data.batch_size
+            loss_train = loss_train_mse + HyperParams.lambda_map * loss_train_map
+            loss_train.backward()
+            optimizer.step()
+            train_rmse += loss_train.item()
+            train_rmse_1 += loss_train_mse.item()
+            train_rmse_2 += loss_train_map.item()
+            
         scheduler.step()
-        train_rmse = sum_loss
-        train_rmse_1 = sum_loss_1
-        train_rmse_2 = sum_loss_2
+        
         train_history['train'].append(train_rmse)
         train_history['l1'].append(train_rmse_1)
         train_history['l2'].append(train_rmse_2)
@@ -79,13 +96,11 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
                     loss_test_map += F.mse_loss(z_estimation, z, reduction='sum')/(len(test_trajectories)*HyperParams.bottleneck_dim)
                     start_ind += data.batch_size
                 loss_test = loss_test_mse +  HyperParams.lambda_map * loss_test_map
-                sum_loss += loss_test.item()
-                sum_loss_1 += loss_test_mse.item()
-                sum_loss_2 += loss_test_map.item()
-
-                test_rmse = sum_loss
-                test_rmse_1 = sum_loss_1
-                test_rmse_2 = sum_loss_2
+                
+                test_rmse += loss_test.item()
+                test_rmse_1 += loss_test_mse.item()
+                test_rmse_2 += loss_test_map.item()
+                
                 test_history['test'].append(test_rmse)
                 test_history['l1'].append(test_rmse_1)
                 test_history['l2'].append(test_rmse_2)
