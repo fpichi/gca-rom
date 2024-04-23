@@ -82,13 +82,13 @@ def hyperparameters_selection(name, var, n, comp):
         labelText_1.set("Scaling type")
         labelBox_1=tk.Label(root, textvariable=labelText_1)
         labelBox_1.grid(row=row, column=0, columnspan=2)
-        selected_var_1 = tk.StringVar(root)  # Variable to store the selected option
-        selected_var_1.set(preset_options_1[preset[0]])  # Set the default value
+        selected_var_1 = tk.StringVar(root)
+        selected_var_1.set(preset_options_1[preset[0]])
         selected_option_1 = tk.StringVar(root)
         selected_option_1.set(selected_var_1.get())
-        dropdown_menu_1 = tk.OptionMenu(root, selected_var_1, *preset_options_1)  # Create and place the OptionMenu widget
+        dropdown_menu_1 = tk.OptionMenu(root, selected_var_1, *preset_options_1)
         dropdown_menu_1.grid(row=row, column=5, columnspan=3)
-        selected_var_1.trace_add("w", on_option_selected_1)  # Bind the on_option_selected function to the OptionMenu widget
+        selected_var_1.trace_add("write", on_option_selected_1)
 
         # BOX2
         row = 1
@@ -96,18 +96,18 @@ def hyperparameters_selection(name, var, n, comp):
         labelText_2.set("Scaling function")
         labelBox_2=tk.Label(root, textvariable=labelText_2)
         labelBox_2.grid(row=row, column=0, columnspan=2)
-        selected_var_2 = tk.StringVar(root)  # Variable to store the selected option
-        selected_var_2.set(preset_options_2[preset[1]])  # Set the default value
+        selected_var_2 = tk.StringVar(root)
+        selected_var_2.set(preset_options_2[preset[1]])
         selected_option_2 = tk.StringVar(root)
         selected_option_2.set(selected_var_2.get())
-        dropdown_menu_2 = tk.OptionMenu(root, selected_var_2, *preset_options_2)  # Create and place the OptionMenu widget
+        dropdown_menu_2 = tk.OptionMenu(root, selected_var_2, *preset_options_2)
         dropdown_menu_2.grid(row=row, column=5, columnspan=3)
-        selected_var_2.trace_add("w", on_option_selected_2)  # Bind the on_option_selected function to the OptionMenu widget
+        selected_var_2.trace_add("write", on_option_selected_2)
 
         # BOLEAN BUTTON
         row = 2
         flag1 = tk.BooleanVar()
-        flag1.set(True) #set check state
+        flag1.set(True)
         chk1 = tk.Checkbutton(root, text='Skip connection', var=flag1)
         chk1.grid(row=row, column=5, columnspan=3)
 
@@ -244,7 +244,7 @@ def hyperparameters_selection(name, var, n, comp):
         labelBox_9=tk.Label(root, textvariable=labelText_9)
         labelBox_9.grid(row=row, column=0, columnspan=2)
         selected_option_9 = tk.StringVar()
-        selected_option_9.trace("w", lambda name, index, mode, selected_option_9=selected_option_9: on_option_selected_9(selected_option_9))
+        selected_option_9.trace_add("write", lambda name, index, mode, selected_option_9=selected_option_9: on_option_selected_9(selected_option_9))
         entry = tk.Entry(root, textvariable=selected_option_9, width=7)
         entry.insert(0, str(preset_options_9[0])) 
         entry.grid(row=row, column=5, columnspan=3)
