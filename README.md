@@ -51,7 +51,7 @@ The proposed modular architecture, namely Graph Convolutional Autoencoder for Re
 <ol>
 <li> a graph-based layer to express an unstructured dataset;</li>
 <li> an encoder module compressing the information through:<ol>
-<li> spatial convolutional layers based on MoNet [57] to identify patterns between geometrically close regions;</li>
+<li> spatial convolutional layers based on <a href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Monti_Geometric_Deep_Learning_CVPR_2017_paper.pdf">MoNet</a> to identify patterns between geometrically close regions;</li>
 <li> skip-connection operation, to keep track of the original information and help the learning procedure;</li>
 <li> a pooling operation, to down-sample the data to obtain smaller networks;</li></ol></li>
 <li> a bottleneck, connected to the encoder by means of a dense layer, which contains the latent
