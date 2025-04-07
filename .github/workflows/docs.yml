@@ -15,7 +15,7 @@ jobs:
     - name: Install Python
       uses: actions/setup-python@v1
       with:
-        python-version: 3.10.14
+        python-version: 3.10.16
 
     - name: Install requirements
       run: |
