@@ -33,9 +33,8 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
     model.train()
     loop = tqdm(range(HyperParams.max_epochs))
     for epoch in loop:
-        train_rmse = sum_loss = 0
+        train_rmse = 0
         train_rmse_1 = train_rmse_2 = 0
-        sum_loss_1 = sum_loss_2 = 0
 
         start_ind = 0
         if HyperParams.minibatch:
@@ -62,10 +61,9 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
             loss_train_map = 0
             for data in train_loader:
                 data = data.to(device)  
-                out, z, z_estimation = model(data, params[train_trajectories[start_ind:start_ind+data.batch_size], :])
+                out, z, z_estimation = model(data, params[train_trajectories, :])
                 loss_train_mse += F.mse_loss(out, data.x, reduction='sum')/(len(train_trajectories)*HyperParams.num_nodes*HyperParams.comp)
                 loss_train_map += F.mse_loss(z_estimation, z, reduction='sum')/(len(train_trajectories)*HyperParams.bottleneck_dim)
-                start_ind += data.batch_size
             loss_train = loss_train_mse + HyperParams.lambda_map * loss_train_map
             loss_train.backward()
             optimizer.step()
@@ -82,19 +80,17 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
         if HyperParams.cross_validation:
             with torch.no_grad():
                 model.eval()
-                test_rmse = sum_loss = 0
+                test_rmse = 0
                 test_rmse_1 = test_rmse_2 = 0
-                sum_loss_1 = sum_loss_2 = 0
 
                 loss_test_mse = 0
                 loss_test_map = 0
                 start_ind = 0
                 for data in test_loader:
                     data = data.to(device)
-                    out, z, z_estimation = model(data, params[test_trajectories[start_ind:start_ind+data.batch_size], :])
+                    out, z, z_estimation = model(data, params[test_trajectories, :])
                     loss_test_mse += F.mse_loss(out, data.x, reduction='sum')/(len(test_trajectories)*HyperParams.num_nodes)
                     loss_test_map += F.mse_loss(z_estimation, z, reduction='sum')/(len(test_trajectories)*HyperParams.bottleneck_dim)
-                    start_ind += data.batch_size
                 loss_test = loss_test_mse +  HyperParams.lambda_map * loss_test_map
                 
                 test_rmse += loss_test.item()
