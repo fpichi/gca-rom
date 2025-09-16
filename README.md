@@ -123,6 +123,8 @@ in collaboration with the MCSS group at EPFL of Prof. Jan S. Hesthaven.
 
 With contributions from:
 
+- Lorenzo Tomada (ltomada@sissa.it)
+- Yuanhong Chen (chenyuanhong@stu.ouc.edu.cn)
 - Oisín Morrison (oisinmmm@gmail.com)
 - Francesco Pettenon (francesco.pettenon@epfl.ch)
 - Francesco Sala (francesco.sala@epfl.ch)
