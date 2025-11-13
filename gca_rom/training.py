@@ -41,13 +41,16 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
             total_batches = 0
             for data in train_loader:
                 optimizer.zero_grad()
-                data = data.to(device)  
-                out, z, z_estimation = model(data, params[train_trajectories[start_ind:start_ind+data.batch_size], :])
+                data = data.to(device)
+                end_ind = min(start_ind + data.batch_size, len(train_trajectories)) # avoid going out of range
+                batch_indices = train_trajectories[start_ind:end_ind]
+                out, z, z_estimation = model(data, params[batch_indices, :])
                 loss_train_mse = F.mse_loss(out, data.x, reduction='mean')
                 loss_train_map = F.mse_loss(z_estimation, z, reduction='mean')
                 loss_train = loss_train_mse + HyperParams.lambda_map * loss_train_map
                 loss_train.backward()
                 optimizer.step()
+                start_ind = end_ind
                 train_rmse += loss_train.item()
                 train_rmse_1 += loss_train_mse.item()
                 train_rmse_2 += loss_train_map.item()
@@ -85,7 +88,6 @@ def train(model, optimizer, device, scheduler, params, train_loader, test_loader
 
                 loss_test_mse = 0
                 loss_test_map = 0
-                start_ind = 0
                 for data in test_loader:
                     data = data.to(device)
                     out, z, z_estimation = model(data, params[test_trajectories, :])
