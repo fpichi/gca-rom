@@ -183,7 +183,7 @@ class DataProcessor(ABC):
         """
         loader = DataLoader(graphs, batch_size=1)
         train_loader = DataLoader(train_dataset, batch_size=train_sims if train_sims<HyperParams.batch_size else HyperParams.batch_size, shuffle=False)
-        test_loader = DataLoader(test_dataset, batch_size=test_sims if test_sims<HyperParams.batch_size else HyperParams.batch_size, shuffle=False)
+        test_loader = DataLoader(test_dataset, batch_size=test_sims, shuffle=False) # DataLoader(test_dataset, batch_size=test_sims if test_sims<HyperParams.batch_size else HyperParams.batch_size, shuffle=False)
         val_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
         return loader, train_loader, test_loader, val_loader
 
